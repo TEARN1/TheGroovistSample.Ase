@@ -1,0 +1,60 @@
+
+body {
+    background-color: #86CDD9;
+    color: #053545;
+}
+
+.BODY {
+    justify-content: center;
+    text-align: center;
+}
+
+.Title {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+img {
+    min-width: 100px;
+    max-width: 100%;
+    margin: 1px;
+}
+
+input , textarea, select {
+    margin: 1px;
+    background-color: #053545;
+    color: white;
+}
+#SearchInput {
+    width: 50;
+}
+
+.two, .Package {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.PublishEvent {
+    background-color: green;
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    border: none;
+    transition: .7s;
+}
+
+.PublishEvent:hover {
+    background-color: white;
+    color: green;
+    transition: .7s;
+}
+
+.Publish {
+    display: flex;
+    justify-content: end;
+    text-align: center;
+}
+
+
