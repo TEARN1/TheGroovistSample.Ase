@@ -1,82 +1,249 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>The Groovist</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="description" content="Find the hottest parties in town with The Groovist!">
+    <meta property="og:title" content="The Groovist">
+    <meta property="og:description" content="Find the hottest parties in town with The Groovist!">
+    <meta property="og:image" content="thumbnail.jpg">
 </head>
-
 <body>
-    <div class="BODY">
-        <div class="Title">
-            <span class="head">
-                <h3 class="heading">The Groovist</h5>
-            </span>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar glass-pink" role="navigation">
+        <ul>
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#events" class="nav-link">Events</a></li>
+            <li><a href="#profile" class="nav-link">Profile</a></li>
+            <li><a href="#settings" class="nav-link">Settings</a></li>
+        </ul>
+        <button class="glass-pink nav-btn" onclick="toggleLoginModal()">Login</button>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="home-section" aria-labelledby="home-title">
+        <h1 id="home-title" class="glass-pink">Welcome to The Groovist!</h1>
+        <p class="glass-pink">Find the hottest parties in town!</p>
+        <button class="glass-pink" onclick="exploreEvents()">Explore Events</button>
+        <button class="glass-pink" onclick="signupNewsletter()">Sign up for Newsletter</button>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="events-section" aria-labelledby="events-title">
+        <h1 id="events-title" class="glass-pink">Party Events</h1>
+        <div class="filter-options glass-pink">
+            <select class="filter-category" onchange="filterEvents(this.value)" aria-label="Event Category">
+                <option value="all">All parties</option>
+                <option value="music-festivals">Music Festivals</option>
+                <option value="birthday-parties">Birthday Parties</option>
+                <option value="wedding-receptions">Wedding Receptions</option>
+                <option value="corporate-events">Corporate Events</option>
+                <option value="holiday-parties">Holiday Parties</option>
+                <option value="nightlife-events">Nightlife Events</option>
+                <option value="concerts">Concerts</option>
+                <option value="raves">Raves</option>
+                <option value="themed-parties">Themed Parties</option>
+            </select>
+            <select class="filter-date" onchange="filterEventsByDate(this.value)" aria-label="Event Date">
+                <option value="all">All dates</option>
+                <option value="today">Today</option>
+                <option value="tomorrow">Tomorrow</option>
+                <option value="next-week">Next week</option>
+                <option value="next-month">Next month</option>
+            </select>
+            <select class="filter-location" onchange="filterEventsByLocation(this.value)" aria-label="Event Location">
+                <option value="all">All locations</option>
+                <option value="new-york">New York</option>
+                <option value="los-angeles">Los Angeles</option>
+                <option value="chicago">Chicago</option>
+                <option value="miami">Miami</option>
+                <option value="las-vegas">Las Vegas</option>
+            </select>
         </div>
-    </div>
-    <div>
-        <div class="">
-            <div class="Publish">
-                <button class="PublishEvent">Publish Event</button>
-            </div>
-            <div class="two">
-                <div>
-
-                    <div>
-                        <h2 class="VanueName">SoulFul Sunday</h2>
-                        <div>
-                            <img class="VanueImg" src="./10 cool music gadgets to make music (even) more fun.jpeg"
-                                alt="">
-                        </div>
-                        <div>
-                            <h3>Date: <span class="VanueDate"></span></h3>
-                            <h3>Vanue: <Span class="VanueAddress">Ivory Park Ext 7 park</Span></h3>
-                            <h3>
-                                <select class="VanueSelection" name="" id="">
-                                    <option value="">CompuTicket</option>
-                                    <option value="">At the gate</option>
-                                    <option value="">Free Entry</option>
-                                    <option value=""> </option>
-                                    <option value=""> <span>Somewhere else</span></option>
-                                </select>
-                            </h3>
-                            <h3 class="VanueLineUp">Line Up:</h3>
-                            <h3 class="VanueHost">Host:</h3>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h2 class="VanueName">SoulFul Sunday</h2>
-                        <div>
-                            <img class="VanueImg" src="./10 cool music gadgets to make music (even) more fun.jpeg" alt="">
-                        </div>
-                        <div>
-                            <h3>Date: <span class="VanueDate"></span></h3>
-                            <h3>Vanue: <Span class="VanueAddress">Ivory Park Ext 7 park</Span></h3>
-                            <h3>
-                                <select class="VanueSelection" name="" id="">
-                                    <option value="">CompuTicket</option>
-                                    <option value="">At the gate</option>
-                                    <option value="">Free Entry</option>
-                                    <option value=""> </option>
-                                    <option value=""> <span>Somewhere else</span></option>
-                                </select>
-                            </h3>
-                            <h3 class="VanueLineUp">Line Up:</h3>
-                            <h3 class="VanueHost">Host:</h3>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+        <div class="event-cards">
+            <!-- Event cards will be rendered here -->
         </div>
-    </div>
+    </section>
 
+    <!-- Profile Section -->
+    <section id="profile" class="profile-section" aria-labelledby="profile-title">
+        <h1 id="profile-title" class="glass-pink">Profile</h1>
+        <div class="profile-header">
+            <img src="profile-picture.jpg" alt="Profile Picture" class="profile-picture">
+            <h2>Username</h2>
+            <button class="edit-profile-btn" onclick="toggleEditProfile()">Edit Profile</button>
+        </div>
+        <div class="profile-info">
+            <h3>Profile Information</h3>
+            <p>Name: John Doe</p>
+            <p>Email: johndoe@example.com</p>
+            <p>Phone Number: 123-456-7890</p>
+<p>Bio: This is my bio.</p>
 
+</div>
 
-    <script src="./app.js"></script>
+<div class="event-history">
+<h3>Event History</h3>
+<h4>Upcoming Events</h4>
+<ul>
+<li>Event 1</li>
+<li>Event 2</li>
+</ul>
+<h4>Past Events</h4>
+<ul>
+<li>Event 3</li>
+<li>Event 4</li>
+</ul>
+</div>
 
+<div class="profile-settings">
+<h3>Profile Settings</h3>
+<ul>
+<li><a href="#account-settings">Account Settings</a></li>
+<li><a href="#change-password">Change Password</a></li>
+<li><a href="#delete-account">Delete Account</a></li>
+</ul>
+</div>
+</section>
+
+<!-- Edit Profile Section -->
+<section id="edit-profile" class="edit-profile-section" aria-labelledby="edit-profile-title">
+<h1 id="edit-profile-title" class="glass-pink">Edit Profile</h1>
+<form id="edit-profile-form">
+<label for="name">Name:</label>
+<input type="text" id="name" name="name">
+
+<label for="email">Email:</label>
+<input type="email" id="email" name="email">
+
+<label for="phone-number">Phone Number:</label>
+<input type="tel" id="phone-number" name="phone-number">
+
+<label for="bio">Bio:</label>
+<textarea id="bio" name="bio"></textarea>
+
+<button type="submit">Save Changes</button>
+
+</form>
+</section>
+
+<!-- Account Settings Section -->
+<section id="account-settings" class="account-settings-section" aria-labelledby="account-settings-title">
+<h1 id="account-settings-title" class="glass-pink">Account Settings</h1>
+<form id="account-settings-form">
+<label for="notification-preferences">Notification Preferences:</label>
+<select id="notification-preferences" name="notification-preferences">
+<option value="all">All Notifications</option>
+<option value="none">No Notifications</option>
+</select>
+
+<label for="language">Language:</label>
+<select id="language" name="language">
+  <option value="english">English</option>
+  <option value="spanish">Spanish</option>
+</select>
+
+<button type="submit">Save Changes</button>
+
+</form>
+</section>
+
+<!-- Change Password Section -->
+<section id="change-password" class="change-password-section" aria-labelledby="change-password-title">
+<h1 id="change-password-title" class="glass-pink">Change Password</h1>
+<form id="change-password-form">
+<label for="current-password">Current Password:</label>
+<input type="password" id="current-password" name="current-password">
+
+<label for="new-password">New Password:</label>
+<input type="password" id="new-password" name="new-password">
+
+<label for="confirm-new-password">Confirm New Password:</label>
+<input type="password" id="confirm-new-password" name="confirm-new-password">
+
+<button type="submit">Change Password</button>
+
+</form>
+</section>
+
+<!-- Delete Account Section -->
+<section id="delete-account" class="delete-account-section" aria-labelledby="delete-account-title">
+<h1 id="delete-account-title" class="glass-pink">Delete Account</h1>
+<p>Are you sure you want to delete your account?</p>
+<button id="delete-account-btn">Delete Account</button>
+</section>
+
+<!-- Login Modal -->
+<div id="login-modal" class="modal" role="dialog">
+<div class="modal-content">
+<h2>Login</h2>
+<form id="login-form">
+<label for="email">Email:</label>
+<input type="email" id="email" name="email">
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name
+  <input type="password" id="password" name="password">
+
+  <button type="submit">Login</button>
+  <p>Don't have an account? <a href="#" onclick="toggleRegisterModal()">Register</a></p>
+</form>
+</div>
+</div>
+
+<!-- Register Modal -->
+<div id="register-modal" class="modal" role="dialog">
+<div class="modal-content">
+  <h2>Register</h2>
+  <form id="register-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="surname">
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+
+    <label for="date-of-birth">Date of Birth:</label>
+    <input type="date" id="date-of-birth" name="date-of-birth">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+
+    <label for="phone-number">Phone Number:</label>
+    <input type="tel" id="phone-number" name="phone-number">
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <button type="submit">Register</button>
+  </form>
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>&copy; 2024 The Groovist. All rights reserved.</p>
+  <ul>
+    <li><a href="terms-and-conditions.html">Terms and Conditions</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="contact-us.html">Contact Us</a></li>
+  </ul>
+  <ul class="social-media">
+    <li><a href="(link unavailable)" target="_blank"><i class="fa fa-facebook"></i></a></li>
+    <li><a href="(link unavailable)" target="_blank"><i class="fa fa-twitter"></i></a></li>
+    <li><a href="(link unavailable)" target="_blank"><i class="fa fa-instagram"></i></a></li>
+  </ul>
+</footer>
+
+<script src="script.js"></script>
 </body>
-
 </html>
