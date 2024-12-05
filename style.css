@@ -109,6 +109,38 @@ body {
     background-color: #e05575; /* Darker pink on hover */
 }
 
+.delete-button {
+    background-color: #ff4f4f; /* Light red for the delete button */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.delete-button:hover {
+    background-color: #e03f3f; /* Darker red on hover */
+}
+
+.comment-button {
+    background-color: rgba(255, 192, 203, 0.8);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.comment-button:hover {
+    background-color: rgba(238, 174, 202, 0.8); /* Different glass effect on hover */
+}
+
 .like-count {
     font-family: 'Arial', sans-serif;
     font-size: 1em;
@@ -203,6 +235,7 @@ body {
     border-radius: 5px;
     border: 1px solid #ddd;
     margin-top: 10px;
+    display: none; /* Hide comment input initially */
 }
 
 /* Modal styles */
@@ -215,21 +248,48 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #fff;
+    background: rgba(255, 192, 203, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid rgba(255, 192, 203, 0.6);
     width: 80%;
     max-width: 500px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: #d147a3; /* Darker pink for the header */
+    font-family: 'Georgia', serif;
+}
+
+.modal-content input, .modal-content select, .modal-content button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.modal-content button {
+    background-color: #d147a3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #b1368f; /* Slightly darker pink on hover */
 }
 
 .close {
@@ -245,3 +305,203 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+/* Profile Section */
+#profile-section {
+    font-family: 'Georgia', serif;
+    background-color: #fff0f5; /* Light pink background */
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 20px; /* Margin to separate from other content */
+    text-align: center;
+}
+
+#profile-section h2 {
+    color: #d147a3; /* Darker pink for the header */
+}
+
+#profile-section .tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+#profile-section .tab-link {
+    background-color: rgba(255, 192, 203, 0.8); /* Glass effect */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+#profile-section .tab-link:hover {
+    background-color: rgba(238, 174, 202, 0.8); /* Different glass effect on hover */
+}
+
+#profile-section .tab-content {
+    display: none; /* Hidden by default */
+    background: rgba(255, 192, 203, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#profile-section .tab-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#profile-section .tab-content ul li {
+    background: rgba(255, 255, 255, 0.8);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content ul li h3 {
+    font-family: 'Georgia', serif;
+    color: #d147a3;
+}
+
+/* Post Styling Adjustments */
+#task-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.8); /* Light background for list items */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+}
+
+#task-list li .post-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#task-list li .post-header .author {
+    font-weight: bold;
+}
+
+#task-list li .post-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+#task-list li .post-actions {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#task-list li .post-actions .action-button {
+    background-color: #ff6f91;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#task-list li .post-actions .action-button:hover {
+    background-color: #e05575; /* Darker pink on hover */
+}
+
+#task-list li .post-actions .comment-button {
+    background-color: rgba(238, 174, 202, 0.8); /* Different glass effect */
+}
+
+#task-list li .comment-input {
+    display: none; /* Hide comment input initially */
+    width: calc(100% - 22px);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: rgba(255, 192, 203, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid rgba(255, 192, 203, 0.6);
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: #d147a3; /* Darker pink for the header */
+    font-family: 'Georgia', serif;
+}
+
+.modal-content input, .modal-content select, .modal-content button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.modal-content button {
+    background-color: #d147a3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #b1368f; /* Slightly darker pink on hover */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
