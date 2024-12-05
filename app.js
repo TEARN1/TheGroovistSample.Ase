@@ -1,4 +1,7 @@
 let savedPosts = [];
+let likedPosts = [];
+let notifications = [];
+let users = [];
 
 function toggleCustomEventInput() {
     let eventTypeInput = document.getElementById('event-type');
@@ -20,17 +23,34 @@ function savePost(post) {
     alert('Post saved!');
 }
 
-function showSavedPosts() {
-    let savedPostsSection = document.getElementById('saved-posts-section');
+function likePost(post) {
+    let likedPostsList = document.getElementById('liked-posts-list');
+    let likedPost = post.cloneNode(true);
+    likedPost.querySelector('.like-button').style.display = 'none'; // Hide the like button in liked posts
+    likedPostsList.appendChild(likedPost);
+    likedPosts.push(likedPost.innerHTML);
+    localStorage.setItem('likedPosts', JSON.stringify(likedPosts)); // Store in localStorage
+    alert('Post liked!');
+}
+
+function showProfile() {
+    let profileSection = document.getElementById('profile-section');
     let taskListSection = document.getElementById('todo-app');
-    if (savedPostsSection.style.display === 'none') {
-        savedPostsSection.style.display = 'block';
+    if (profileSection.style.display === 'none') {
+        profileSection.style.display = 'block';
         taskListSection.style.display = 'none';
-        loadSavedPosts();
+        loadProfileTabs();
     } else {
-        savedPostsSection.style.display = 'none';
+        profileSection.style.display = 'none';
         taskListSection.style.display = 'block';
     }
+}
+
+function loadProfileTabs() {
+    loadSavedPosts();
+    loadLikedPosts();
+    loadNotifications();
+    loadProfileInfo();
 }
 
 function loadSavedPosts() {
@@ -43,6 +63,44 @@ function loadSavedPosts() {
         savedPost.querySelector('.save-button').style.display = 'none'; // Hide the save button in saved posts
         savedPostsList.appendChild(savedPost);
     });
+}
+
+function loadLikedPosts() {
+    let likedPostsList = document.getElementById('liked-posts-list');
+    likedPostsList.innerHTML = '';
+    likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
+    likedPosts.forEach(postHTML => {
+        let likedPost = document.createElement('li');
+        likedPost.innerHTML = postHTML;
+        likedPost.querySelector('.like-button').style.display = 'none'; // Hide the like button in liked posts
+        likedPostsList.appendChild(likedPost);
+    });
+}
+
+function loadNotifications() {
+    let notificationsList = document.getElementById('notifications-list');
+    notificationsList.innerHTML = '';
+    notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    notifications.forEach(notificationHTML => {
+        let notification = document.createElement('li');
+        notification.innerHTML = notificationHTML;
+        notificationsList.appendChild(notification);
+    });
+}
+
+function loadProfileInfo() {
+    let profileInfo = document.getElementById('profile-info');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        profileInfo.innerHTML = `
+            <p><strong>Username:</strong> ${currentUser.username}</p>
+            <p><strong>Full Name:</strong> ${currentUser.fullName}</p>
+            <p><strong>Age:</strong> ${currentUser.age}</p>
+            <p><strong>Gender:</strong> ${currentUser.gender}</p>
+        `;
+    } else {
+        profileInfo.innerHTML = `<p>Please log in to view your profile information.</p>`;
+    }
 }
 
 function addTask() {
@@ -67,119 +125,38 @@ function addTask() {
     let newTask = document.createElement('li');
     let timestamp = new Date();
     newTask.innerHTML = `
-        <strong>TEARN</strong><br>
-        ${taskText}<br>
-        <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span><br>
-        <strong>Date & Time:</strong> ${new Date(datetime).toLocaleString()}<br>
-        <strong>Event Type:</strong> ${eventType}<br>
-        <strong>Ticket Price:</strong> ${ticketPrice === '' ? 'Free' : 'R' + ticketPrice}
+        <div class="post-header">
+            <span class="author">TEARN</span>
+            <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span>
+        </div>
+        <div>${taskText}</div>
+        ${imgFile ? `<img src="${URL.createObjectURL(imgFile)}" alt="Event Image">` : ''}
+        <div class="post-details">
+            <strong>Date & Time:</strong> ${new Date(datetime).toLocaleString()}<br>
+            <strong>Event Type:</strong> ${eventType}<br>
+            <strong>Ticket Price:</strong> ${ticketPrice === '' ? 'Free' : 'R' + ticketPrice}
+        </div>
+        <div class="post-actions">
+            <button class="like-button action-button" onclick="likePost(this.parentElement.parentElement)">Like</button>
+            <button class="save-button action-button" onclick="savePost(this.parentElement.parentElement)">Save</button>
+            <button class="delete-button action-button" onclick="deletePost(this.parentElement.parentElement)">Delete</button>
+            <button class="comment-button action-button" onclick="toggleCommentInput(this)">Comment</button>
+        </div>
+        <div class="comment-section">
+            <input type="text" class="comment-input" placeholder="Add a comment...">
+        </div>
     `;
 
-    if (imgFile) {
-        let reader = new FileReader();
-        reader.onload = function(event) {
-            let img = document.createElement('img');
-            img.src = event.target.result;
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-            img.style.marginTop = '10px';
-            img.style.borderRadius = '8px';
-            newTask.appendChild(img);
-
-            newTask.innerHTML += `
-                <div class="comment-section">
-                    <input type="text" class="comment-input" placeholder="Add a comment...">
-                </div>
-            `;
-
-            let likeButton = document.createElement('button');
-            likeButton.textContent = 'Like';
-            likeButton.classList.add('like-button');
-            let likeCount = document.createElement('div');
-            likeCount.textContent = '0 Likes';
-            likeCount.classList.add('like-count');
-            likeButton.onclick = function() {
-                let count = parseInt(likeCount.textContent.split(' ')[0]);
-                likeCount.textContent = `${count + 1} Likes`;
-            };
-
-            let removeButton = document.createElement('button');
-            removeButton.textContent = 'Remove';
-            removeButton.onclick = function() {
-                taskList.removeChild(newTask);
-            };
-
-            let saveButton = document.createElement('button');
-            saveButton.textContent = 'Save';
-            saveButton.classList.add('save-button');
-            saveButton.onclick = function() {
-                savePost(newTask);
-            };
-
-            newTask.appendChild(likeButton);
-            newTask.appendChild(likeCount);
-            newTask.appendChild(removeButton);
-            newTask.appendChild(saveButton);
-
-            let commentInput = newTask.querySelector('.comment-input');
-            commentInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    let commentText = commentInput.value;
-                    if (commentText !== '') {
-                        addComment(newTask, commentText);
-                        commentInput.value = '';
-                    }
-                }
-            });
-        };
-        reader.readAsDataURL(imgFile);
-    } else {
-        newTask.innerHTML += `
-            <div class="comment-section">
-                <input type="text" class="comment-input" placeholder="Add a comment...">
-            </div>
-        `;
-
-        let likeButton = document.createElement('button');
-        likeButton.textContent = 'Like';
-        likeButton.classList.add('like-button');
-        let likeCount = document.createElement('div');
-        likeCount.textContent = '0 Likes';
-        likeCount.classList.add('like-count');
-        likeButton.onclick = function() {
-            let count = parseInt(likeCount.textContent.split(' ')[0]);
-            likeCount.textContent = `${count + 1} Likes`;
-        };
-
-        let removeButton = document.createElement('button');
-        removeButton.textContent = 'Remove';
-        removeButton.onclick = function() {
-            taskList.removeChild(newTask);
-        };
-
-        let saveButton = document.createElement('button');
-        saveButton.textContent = 'Save';
-        saveButton.classList.add('save-button');
-        saveButton.onclick = function() {
-            savePost(newTask);
-        };
-
-        newTask.appendChild(likeButton);
-        newTask.appendChild(likeCount);
-        newTask.appendChild(removeButton);
-        newTask.appendChild(saveButton);
-
-        let commentInput = newTask.querySelector('.comment-input');
-        commentInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                let commentText = commentInput.value;
-                if (commentText !== '') {
-                    addComment(newTask, commentText);
-                    commentInput.value = '';
-                }
+    newTask.querySelector('.comment-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            let commentText = this.value;
+            if (commentText !== '') {
+                addComment(newTask, commentText);
+                this.value = '';
+                addNotification('Someone commented on your post!');
             }
-        });
-    }
+        }
+    });
 
     taskList.insertBefore(newTask, taskList.firstChild);
 
@@ -192,42 +169,49 @@ function addTask() {
     closeModal();
 }
 
+function deletePost(post) {
+    let taskList = document.getElementById('task-list');
+    taskList.removeChild(post);
+}
+
 function addComment(task, commentText) {
     let commentSection = task.querySelector('.comment-section');
+    let timestamp = new Date();
     let comment = document.createElement('div');
     comment.classList.add('comment');
-    comment.innerHTML = `<div class="comment-text">${commentText}</div>
-                         <div class="comment-likes">
-                             <button class="comment-like-button">Like</button>
-                             <span class="comment-like-count">0 Likes</span>
-                             <button class="reply-button">Reply</button>
-                         </div>
-                         <div class="replies"></div>
-                         <input type="text" class="reply-input" placeholder="Write a reply..." style="display:none;">`;
+    comment.innerHTML = `
+        <div class="comment-text">${commentText}</div>
+        <div class="comment-likes">
+            <button class="comment-like-button">Like</button>
+            <span class="comment-like-count">0 Likes</span>
+            <button class="reply-button">Reply</button>
+        </div>
+        <div class="replies"></div>
+        <input type="text" class="reply-input" placeholder="Write a reply..." style="display:none;">
+        <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span>
+    `;
 
-    let likeButton = comment.querySelector('.comment-like-button');
-    let likeCount = comment.querySelector('.comment-like-count');
-    let replyButton = comment.querySelector('.reply-button');
-    let replyInput = comment.querySelector('.reply-input');
-
-    likeButton.onclick = function() {
+    comment.querySelector('.comment-like-button').onclick = function() {
+        let likeCount = comment.querySelector('.comment-like-count');
         let count = parseInt(likeCount.textContent.split(' ')[0]);
         likeCount.textContent = `${count + 1} Likes`;
         sortComments(commentSection);
     };
 
-    replyButton.onclick = function() {
+    comment.querySelector('.reply-button').onclick = function() {
+        let replyInput = comment.querySelector('.reply-input');
         replyInput.style.display = 'block';
         replyInput.focus();
     };
 
-    replyInput.addEventListener('keypress', function(event) {
+    comment.querySelector('.reply-input').addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            let replyText = replyInput.value;
+            let replyText = this.value;
             if (replyText !== '') {
                 addReply(comment, replyText);
-                replyInput.value = '';
-                replyInput.style.display = 'none';
+                this.value = '';
+                this.style.display = 'none';
+                addNotification('Someone replied to your comment!');
             }
         }
     });
@@ -237,17 +221,19 @@ function addComment(task, commentText) {
 
 function addReply(comment, replyText) {
   let reply = document.createElement('div');
+  let timestamp = new Date();
   reply.classList.add('reply');
-  reply.innerHTML = `<div class="reply-text">${replyText}</div>
-                     <div class="reply-likes">
-                         <button class="reply-like-button">Like</button>
-                         <span class="reply-like-count">0 Likes</span>
-                     </div>`;
+  reply.innerHTML = `
+      <div class="reply-text">${replyText}</div>
+      <div class="reply-likes">
+          <button class="reply-like-button">Like</button>
+          <span class="reply-like-count">0 Likes</span>
+      </div>
+      <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span>
+  `;
 
-  let likeButton = reply.querySelector('.reply-like-button');
-  let likeCount = reply.querySelector('.reply-like-count');
-
-  likeButton.onclick = function() {
+  reply.querySelector('.reply-like-button').onclick = function() {
+      let likeCount = reply.querySelector('.reply-like-count');
       let count = parseInt(likeCount.textContent.split(' ')[0]);
       likeCount.textContent = `${count + 1} Likes`;
       sortReplies(comment);
@@ -323,3 +309,116 @@ function openModal() {
 function closeModal() {
   document.getElementById('myModal').style.display = 'none';
 }
+
+function openTab(evt, tabName) {
+  let tabcontent = document.getElementsByClassName("tab-content");
+  for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+  }
+  let tablinks = document.getElementsByClassName("tab-link");
+  for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+function addNotification(notificationText) {
+  let notificationsList = document.getElementById('notifications-list');
+  let notification = document.createElement('li');
+  notification.textContent = notificationText;
+  notificationsList.appendChild(notification);
+  notifications.push(notification.innerHTML);
+  localStorage.setItem('notifications', JSON.stringify(notifications)); // Store in localStorage
+}
+
+function toggleCommentInput(button) {
+  let commentInput = button.parentElement.nextElementSibling.querySelector('.comment-input');
+  if (commentInput.style.display === 'none' || commentInput.style.display === '') {
+      commentInput.style.display = 'block';
+  } else {
+      commentInput.style.display = 'none';
+  }
+}
+
+// Login/Register Functions
+function openLoginModal() {
+  document.getElementById('loginModal').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('fullName').value = '';
+  document.getElementById('age').value = '';
+  document.getElementById('gender').value = '';
+}
+
+function closeLoginModal() {
+  document.getElementById('loginModal').style.display = 'none';
+}
+
+function registerUser() {
+  let username = document.getElementById('username').value;
+  let password = document.getElementById('password').value;
+  let fullName = document.getElementById('fullName').value;
+  let age = document.getElementById('age').value;
+  let gender = document.getElementById('gender').value;
+
+  if (username === '' || password === '' || fullName === '' || age === '' || gender === '') {
+      alert('Please fill in all fields.');
+      return;
+  }
+
+  let user = { username, password, fullName, age, gender };
+  users.push(user);
+  localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('currentUser', JSON.stringify(user));
+  alert('Registration successful!');
+  closeLoginModal();
+  showProfile();
+}
+
+function loginUser() {
+  let username = document.getElementById('username').value;
+  let password = document.getElementById('password').value;
+
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  let user = users.find(user => user.username === username && user.password === password);
+
+  if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      alert('Login successful!');
+      closeLoginModal();
+      showProfile();
+  } else {
+      alert('Invalid username or password. Please try again.');
+  }
+}
+
+function logoutUser() {
+  localStorage.removeItem('currentUser');
+  alert('Logout successful!');
+  showProfile();
+}
+
+function updateProfile() {
+  let fullName = document.getElementById('profileFullName').value;
+  let age = document.getElementById('profileAge').value;
+  let gender = document.getElementById('profileGender').value;
+
+  let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser) {
+      currentUser.fullName = fullName;
+      currentUser.age = age;
+      currentUser.gender = gender;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      alert('Profile updated!');
+      loadProfileInfo();
+  } else {
+      alert('Please log in to update your profile.');
+  }
+}
+
+// Additional handler for the login button
+document.querySelector('#loginModal button[onclick="registerUser()"]').insertAdjacentHTML('afterend', `
+  <button onclick="loginUser()">Login</button>
+`);
