@@ -7,16 +7,72 @@
 <body>
     <div class="navbar">
         <h2>The Gruvist</h2>
+        <button onclick="openLoginModal()">Login/Register</button>
         <button onclick="openModal()">Add Event</button>
-        <button onclick="showSavedPosts()">View Saved Posts</button>
+        <button onclick="showProfile()">Profile</button>
+        <button onclick="logoutUser()">Logout</button>
     </div>
     <div id="todo-app">
         <ul id="task-list"></ul>
     </div>
 
-    <div id="saved-posts-section" style="display:none;">
-        <h2>Saved Posts</h2>
-        <ul id="saved-posts-list"></ul>
+    <div id="profile-section" style="display:none;">
+        <h2>Profile</h2>
+        <div id="profile-info">
+            <!-- User information will be displayed here -->
+        </div>
+        <div class="tabs">
+            <button class="tab-link" onclick="openTab(event, 'Liked')">Liked</button>
+            <button class="tab-link" onclick="openTab(event, 'Saved')">Saved</button>
+            <button class="tab-link" onclick="openTab(event, 'Notifications')">Notifications</button>
+        </div>
+        <div id="Liked" class="tab-content" style="display:none;">
+            <h3>Liked Posts</h3>
+            <ul id="liked-posts-list"></ul>
+        </div>
+        <div id="Saved" class="tab-content" style="display:none;">
+            <h3>Saved Posts</h3>
+            <ul id="saved-posts-list"></ul>
+        </div>
+        <div id="Notifications" class="tab-content" style="display:none;">
+            <h3>Notifications</h3>
+            <ul id="notifications-list"></ul>
+        </div>
+        <div id="profile-update">
+            <h3>Update Profile</h3>
+            <input type="text" id="profileFullName" placeholder="Full Name">
+            <input type="number" id="profileAge" placeholder="Age" min="0">
+            <select id="profileGender">
+                <option value="" disabled selected>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-Binary</option>
+                <option value="prefer-not-to-say">Prefer Not to Say</option>
+            </select>
+            <button onclick="updateProfile()">Update Profile</button>
+        </div>
+        <button onclick="showProfile()">Back to Posts</button>
+    </div>
+
+    <!-- Login/Register Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <input type="text" id="fullName" placeholder="Full Name">
+            <input type="number" id="age" placeholder="Age" min="0">
+            <select id="gender">
+                <option value="" disabled selected>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-Binary</option>
+                <option value="prefer-not-to-say">Prefer Not to Say</option>
+            </select>
+            <button onclick="registerUser()">Register</button>
+            <button onclick="loginUser()">Login</button>
+        </div>
     </div>
 
     <div id="myModal" class="modal">
@@ -37,6 +93,110 @@
                 <option value="webinar">Webinar</option>
                 <option value="party">Party</option>
                 <option value="exhibition">Exhibition</option>
+                <option value="children-birthday">Children's Birthday Party</option>
+                <option value="adult-birthday">Adult Birthday Party</option>
+                <option value="milestone-birthday">Milestone Birthday Party</option>
+                <option value="wedding-anniversary">Wedding Anniversary</option>
+                <option value="dating-anniversary">Dating Anniversary</option>
+                <option value="friendship-anniversary">Friendship Anniversary</option>
+                <option value="traditional-wedding">Traditional Wedding</option>
+                <option value="destination-wedding">Destination Wedding</option>
+                <option value="civil-ceremony">Civil Ceremony</option>
+                <option value="elopement">Elopement</option>
+                <option value="gender-reveal">Gender Reveal Party</option>
+                <option value="co-ed-baby-shower">Co-ed Baby Shower</option>
+                <option value="virtual-baby-shower">Virtual Baby Shower</option>
+                <option value="high-school-graduation">High School Graduation</option>
+                <option value="college-graduation">College Graduation</option>
+                <option value="masters-graduation">Master's Degree Graduation</option>
+                <option value="phd-graduation">PhD Graduation</option>
+                <option value="office-retirement">Office Retirement Party</option>
+                <option value="family-retirement">Family Retirement Party</option>
+                <option value="surprise-retirement">Surprise Retirement Party</option>
+                <option value="formal-engagement">Formal Engagement Party</option>
+                <option value="casual-engagement">Casual Engagement Party</option>
+                <option value="surprise-engagement">Surprise Engagement Party</option>
+                <option value="potluck-housewarming">Potluck Housewarming Party</option>
+                <option value="cocktail-housewarming">Cocktail Housewarming Party</option>
+                <option value="dinner-housewarming">Dinner Housewarming Party</option>
+                <option value="christmas-party">Christmas Party</option>
+                <option value="new-year-party">New Year's Eve Party</option>
+                <option value="thanksgiving-party">Thanksgiving Party</option>
+                <option value="hanukkah-party">Hanukkah Party</option>
+                <option value="diwali-party">Diwali Party</option>
+                <option value="formal-cocktail">Formal Cocktail Party</option>
+                <option value="casual-cocktail">Casual Cocktail Party</option>
+                <option value="themed-cocktail">Themed Cocktail Party</option>
+                <option value="formal-dinner">Formal Dinner Party</option>
+                <option value="casual-dinner">Casual Dinner Party</option>
+                <option value="potluck-dinner">Potluck Dinner Party</option>
+                <option value="board-game-night">Board Game Night</option>
+                <option value="video-game-night">Video Game Night</option>
+                <option value="card-game-night">Card Game Night</option>
+                <option value="classic-movie-night">Classic Movie Night</option>
+                <option value="themed-movie-night">Themed Movie Night</option>
+                <option value="outdoor-movie-night">Outdoor Movie Night</option>
+                <option value="fiction-book-club">Fiction Book Club</option>
+                <option value="non-fiction-book-club">Non-Fiction Book Club</option>
+                <option value="genre-book-club">Genre-Specific Book Club</option>
+                <option value="holiday-potluck">Holiday Potluck</option>
+                <option value="birthday-potluck">Birthday Potluck</option>
+                <option value="neighborhood-potluck">Neighborhood Potluck</option>
+                <option value="halloween-party">Halloween Party</option>
+                <option value="masquerade-ball">Masquerade Ball</option>
+                <option value="luau-party">Luau Party</option>
+                <option value="80s-party">80s Party</option>
+                <option value="90s-party">90s Party</option>
+                <option value="high-school-reunion">High School Reunion</option>
+                <option value="college-reunion">College Reunion</option>
+                <option value="family-reunion">Family Reunion</option>
+                <option value="military-reunion">Military Reunion</option>
+                <option value="industry-conference">Industry Conference</option>
+                <option value="academic-conference">Academic Conference</option>
+                <option value="technical-conference">Technical Conference</option>
+                <option value="training-seminar">Training Seminar</option>
+                <option value="informational-seminar">Informational Seminar</option>                <option value="press-conference">Press Conference</option>
+                <option value="product-demo">Product Demonstration</option>
+                <option value="virtual-launch">Virtual Product Launch</option>
+                <option value="industry-mixer">Industry Mixer</option>
+                <option value="chamber-event">Chamber of Commerce Event</option>
+                <option value="alumni-event">Alumni Event</option>
+                <option value="team-building-event">Team-Building Event</option>
+                <option value="holiday-party">Corporate Holiday Party</option>
+                <option value="awards-ceremony">Awards Ceremony</option>
+                <option value="music-festival">Music Festival</option>
+                <option value="food-festival">Food Festival</option>
+                <option value="art-festival">Art Festival</option>
+                <option value="cultural-festival">Cultural Festival</option>
+                <option value="fundraiser">Fundraiser</option>
+                <option value="charity-gala">Charity Gala</option>
+                <option value="charity-auction">Charity Auction</option>
+                <option value="neighborhood-meeting">Neighborhood Watch Meeting</option>
+                <option value="community-cleanup">Community Clean-up Day</option>
+                <option value="community-picnic">Community Picnic</option>
+                <option value="street-festival">Street Festival</option>
+                <option value="neighborhood-barbecue">Neighborhood Barbecue</option>
+                <option value="block-party-game">Block Party Game</option>
+                <option value="rock-concert">Rock Concert</option>
+                <option value="pop-concert">Pop Concert</option>
+                <option value="classical-concert">Classical Concert</option>
+                <option value="jazz-concert">Jazz Concert</option>
+                <option value="football-game">Football Game</option>
+                <option value="basketball-game">Basketball Game</option>
+                <option value="baseball-game">Baseball Game</option>
+                <option value="soccer-game">Soccer Game</option>
+                <option value="play">Play</option>
+                <option value="musical">Musical</option>
+                <option value="opera">Opera</option>
+                <option value="painting-exhibition">Painting Exhibition</option>
+                <option value="sculpture-exhibition">Sculpture Exhibition</option>
+                <option value="photography-exhibition">Photography Exhibition</option>
+                <option value="food-truck-festival">Food Truck Festival</option>
+                <option value="wine-festival">Wine Festival</option>
+                <option value="beer-festival">Beer Festival</option>
+                <option value="electronic-music-festival">Electronic Music Festival</option>
+                <option value="country-music-festival">Country Music Festival</option>
+                <option value="rock-music-festival">Rock Music Festival</option>
                 <option value="other">Other</option>
             </select>
             <input type="text" id="custom-event-type" placeholder="Enter custom event type" style="display: none;">
@@ -46,7 +206,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
