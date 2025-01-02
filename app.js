@@ -452,3 +452,28 @@ function updateProfile() {
 document.querySelector('#loginModal button[onclick="registerUser()"]').insertAdjacentHTML('afterend', `
   <button onclick="loginUser()">Login</button>
 `);
+
+
+
+
+function sortComments(commentSection) {
+    let comments = Array.from(commentSection.children);
+
+    comments.sort((a, b) => {
+        let aLikes = parseInt(a.querySelector('.comment-like-count').textContent.split(' ')[0]);
+        let bLikes = parseInt(b.querySelector('.comment-like-count').textContent.split(' ')[0]);
+        return bLikes - aLikes;
+    });
+
+    comments.forEach((comment, index) => {
+        comment.classList.remove('glass-platinum', 'glass-gold', 'glass-silver');
+        if (index === 0) {
+            comment.classList.add('glass-platinum');
+        } else if (index === 1) {
+            comment.classList.add('glass-gold');
+        } else if (index === 2) {
+            comment.classList.add('glass-silver');
+        }
+        commentSection.appendChild(comment);
+    });
+}
