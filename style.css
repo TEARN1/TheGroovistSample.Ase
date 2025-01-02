@@ -524,3 +524,26 @@ body {
     display: none; /* Hide comment input initially */
 }
 
+/* Glass Effects for Comments */
+.glass-platinum {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.glass-gold {
+    background: rgba(255, 215, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+}
+
+.glass-silver {
+    background: rgba(192, 192, 192, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(192, 192, 192, 0.3);
+    border-radius: 10px;
+}
+
+
