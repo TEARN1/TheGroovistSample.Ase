@@ -109,14 +109,16 @@ function addTask() {
     let eventTypeInput = document.getElementById('event-type');
     let customEventInput = document.getElementById('custom-event-type');
     let ticketPriceInput = document.getElementById('ticket-price');
+    let venueInput = document.getElementById('venue'); // New Venue input
     let imgInput = document.getElementById('img-upload');
     let taskText = taskInput.value;
     let datetime = datetimeInput.value;
     let eventType = eventTypeInput.value === 'other' ? customEventInput.value : eventTypeInput.value;
     let ticketPrice = ticketPriceInput.value;
-    let imgFile = imgInput.files[0];
+    let venue = venueInput.value; // Get Venue value
+    let imgFiles = imgInput.files;
 
-    if (taskText === '' || datetime === '' || eventType === '') {
+    if (taskText === '' || datetime === '' || eventType === '' || venue === '') {
         alert('Please fill in all required fields.');
         return;
     }
@@ -124,17 +126,24 @@ function addTask() {
     let taskList = document.getElementById('task-list');
     let newTask = document.createElement('li');
     let timestamp = new Date();
+    let mediaElements = '';
+
+    for (let i = 0; i < imgFiles.length; i++) {
+        mediaElements += `<div class="media-item"><img src="${URL.createObjectURL(imgFiles[i])}" alt="Event Image"></div>`;
+    }
+
     newTask.innerHTML = `
         <div class="post-header">
             <span class="author">TEARN</span>
             <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span>
         </div>
         <div>${taskText}</div>
-        ${imgFile ? `<img src="${URL.createObjectURL(imgFile)}" alt="Event Image">` : ''}
+        <div class="media-container">${mediaElements}</div> <!-- Media container for flipping images/videos -->
         <div class="post-details">
             <strong>Date & Time:</strong> ${new Date(datetime).toLocaleString()}<br>
             <strong>Event Type:</strong> ${eventType}<br>
-            <strong>Ticket Price:</strong> ${ticketPrice === '' ? 'Free' : 'R' + ticketPrice}
+            <strong>Ticket Price:</strong> ${ticketPrice === '' ? 'Free' : 'R' + ticketPrice}<br>
+            <strong>Venue:</strong> ${venue} <!-- Display Venue -->
         </div>
         <div class="post-actions">
             <button class="like-button action-button" onclick="likePost(this.parentElement.parentElement)">Like</button>
@@ -145,6 +154,7 @@ function addTask() {
         <div class="comment-section">
             <input type="text" class="comment-input" placeholder="Add a comment...">
         </div>
+        <div class="upload-counter">${imgFiles.length} files uploaded</div> <!-- Counter for uploaded files -->
     `;
 
     newTask.querySelector('.comment-input').addEventListener('keypress', function(event) {
@@ -165,10 +175,30 @@ function addTask() {
     eventTypeInput.value = '';
     customEventInput.value = '';
     ticketPriceInput.value = '';
+    venueInput.value = ''; // Reset Venue input
     imgInput.value = '';
     closeModal();
 }
 
+// CSS for media container and flipping functionality:
+const style = document.createElement('style');
+style.innerHTML = `
+    .media-container {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        height: 200px;
+        position: relative;
+    }
+    .media-item {
+        min-width: 100%;
+        transition: transform 0.5s ease;
+    }
+    .media-container:hover .media-item {
+        transform: translateX(-100%);
+    }
+`;
+document.head.appendChild(style);
 function deletePost(post) {
     let taskList = document.getElementById('task-list');
     taskList.removeChild(post);
