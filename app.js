@@ -2,6 +2,12 @@ let savedPosts = [];
 let likedPosts = [];
 let notifications = [];
 let users = [];
+let eventLineup = [];
+
+const MAX_IMAGES = 5;
+const MAX_VIDEOS = 2;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
 function toggleCustomEventInput() {
     let eventTypeInput = document.getElementById('event-type');
@@ -103,80 +109,49 @@ function loadProfileInfo() {
     }
 }
 
-function addTask() {
-    let taskInput = document.getElementById('new-task');
-    let datetimeInput = document.getElementById('event-datetime');
-    let eventTypeInput = document.getElementById('event-type');
-    let customEventInput = document.getElementById('custom-event-type');
-    let ticketPriceInput = document.getElementById('ticket-price');
-    let venueInput = document.getElementById('venue'); // New Venue input
-    let imgInput = document.getElementById('img-upload');
-    let taskText = taskInput.value;
-    let datetime = datetimeInput.value;
-    let eventType = eventTypeInput.value === 'other' ? customEventInput.value : eventTypeInput.value;
-    let ticketPrice = ticketPriceInput.value;
-    let venue = venueInput.value; // Get Venue value
-    let imgFiles = imgInput.files;
+function validateAddress(address) {
+    // Basic address validation
+    if (!address || address.trim().length < 5) {
+        alert('Please enter a complete address');
+        return false;
+    }
+    
+    // Check for basic address components (street number, street name)
+    const hasStreetNumber = /\d+/.test(address);
+    const hasStreetName = /[a-zA-Z]+/.test(address);
+    
+    if (!hasStreetNumber || !hasStreetName) {
+        alert('Please include street number and name in the address');
+        return false;
+    }
+    
+    return true;
+}
 
-    if (taskText === '' || datetime === '' || eventType === '' || venue === '') {
-        alert('Please fill in all required fields.');
+function addTask() {
+    if (!userManager.currentUser) {
+        alert('Please login to create an event');
+        openLoginModal();
         return;
     }
 
-    let taskList = document.getElementById('task-list');
-    let newTask = document.createElement('li');
-    let timestamp = new Date();
-    let mediaElements = '';
+    if (!validateTabs()) return;
 
-    for (let i = 0; i < imgFiles.length; i++) {
-        mediaElements += `<div class="media-item"><img src="${URL.createObjectURL(imgFiles[i])}" alt="Event Image"></div>`;
-    }
+    const eventData = {
+        title: document.getElementById('new-task').value,
+        datetime: document.getElementById('event-datetime').value,
+        eventType: document.getElementById('event-type').value,
+        venue: document.getElementById('venue').value,
+        userId: userManager.currentUser.id,
+        media: getMediaUrls(),
+        tickets: getTicketInfo(),
+        lineup: eventLineup
+    };
 
-    newTask.innerHTML = `
-        <div class="post-header">
-            <span class="author">TEARN</span>
-            <span class="timestamp" data-time="${timestamp.toISOString()}">${timeSince(timestamp)}</span>
-        </div>
-        <div>${taskText}</div>
-        <div class="media-container">${mediaElements}</div> <!-- Media container for flipping images/videos -->
-        <div class="post-details">
-            <strong>Date & Time:</strong> ${new Date(datetime).toLocaleString()}<br>
-            <strong>Event Type:</strong> ${eventType}<br>
-            <strong>Ticket Price:</strong> ${ticketPrice === '' ? 'Free' : 'R' + ticketPrice}<br>
-            <strong>Venue:</strong> ${venue} <!-- Display Venue -->
-        </div>
-        <div class="post-actions">
-            <button class="like-button action-button" onclick="likePost(this.parentElement.parentElement)">Like</button>
-            <button class="save-button action-button" onclick="savePost(this.parentElement.parentElement)">Save</button>
-            <button class="delete-button action-button" onclick="deletePost(this.parentElement.parentElement)">Delete</button>
-            <button class="comment-button action-button" onclick="toggleCommentInput(this)">Comment</button>
-        </div>
-        <div class="comment-section">
-            <input type="text" class="comment-input" placeholder="Add a comment...">
-        </div>
-        <div class="upload-counter">${imgFiles.length} files uploaded</div> <!-- Counter for uploaded files -->
-    `;
-
-    newTask.querySelector('.comment-input').addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            let commentText = this.value;
-            if (commentText !== '') {
-                addComment(newTask, commentText);
-                this.value = '';
-                addNotification('Someone commented on your post!');
-            }
-        }
-    });
-
-    taskList.insertBefore(newTask, taskList.firstChild);
-
-    taskInput.value = '';
-    datetimeInput.value = '';
-    eventTypeInput.value = '';
-    customEventInput.value = '';
-    ticketPriceInput.value = '';
-    venueInput.value = ''; // Reset Venue input
-    imgInput.value = '';
+    const newEvent = eventManager.createEvent(eventData);
+    displayEvent(newEvent);
+    refreshHappenings();
+    clearForm();
     closeModal();
 }
 
@@ -285,15 +260,34 @@ function sortReplies(comment) {
 }
 
 function sortComments(commentSection) {
-  let comments = Array.from(commentSection.children);
+    let comments = Array.from(commentSection.children);
+    
+    // Remove existing glass effects
+    comments.forEach(comment => {
+        comment.classList.remove('glass-platinum', 'glass-gold', 'glass-silver');
+    });
 
-  comments.sort((a, b) => {
-      let aLikes = parseInt(a.querySelector('.comment-like-count').textContent.split(' ')[0]);
-      let bLikes = parseInt(b.querySelector('.comment-like-count').textContent.split(' ')[0]);
-      return bLikes - aLikes;
-  });
+    // Sort by likes
+    comments.sort((a, b) => {
+        let aLikes = parseInt(a.querySelector('.comment-like-count').textContent.split(' ')[0]);
+        let aReplies = a.querySelectorAll('.reply').length;
+        let bLikes = parseInt(b.querySelector('.comment-like-count').textContent.split(' ')[0]);
+        let bReplies = b.querySelectorAll('.reply').length;
+        
+        // Calculate total engagement (likes + replies)
+        let aTotal = aLikes + aReplies;
+        let bTotal = bLikes + bReplies;
+        
+        return bTotal - aTotal;
+    });
 
-  comments.forEach(comment => commentSection.appendChild(comment));
+    // Apply glass effects to top 3
+    if (comments.length > 0) comments[0].classList.add('glass-platinum');
+    if (comments.length > 1) comments[1].classList.add('glass-gold');
+    if (comments.length > 2) comments[2].classList.add('glass-silver');
+
+    // Reappend in sorted order
+    comments.forEach(comment => commentSection.appendChild(comment));
 }
 
 function timeSince(date) {
@@ -373,17 +367,85 @@ function toggleCommentInput(button) {
 
 // Login/Register Functions
 function openLoginModal() {
-  document.getElementById('loginModal').style.display = 'flex';
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
-  document.getElementById('fullName').value = '';
-  document.getElementById('age').value = '';
-  document.getElementById('gender').value = '';
+    document.getElementById('loginModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
 }
 
 function closeLoginModal() {
-  document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('loginModal').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
 }
+
+function switchAuthTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+
+    // Update tab content
+    document.querySelectorAll('.auth-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    document.getElementById(`${tab}Tab`).classList.add('active');
+}
+
+// Password Toggle
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const input = icon.previousElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+});
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.classList.contains('auth-modal')) {
+        closeLoginModal();
+    }
+}
+
+// Form Submission
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    try {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        await userManager.login(username, password);
+        updateUIForAuth();
+        closeLoginModal();
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    try {
+        const username = document.getElementById('regUsername').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+        if (password !== confirmPassword) {
+            throw new Error('Passwords do not match');
+        }
+
+        await userManager.register(username, email, password);
+        alert('Registration successful! Please login.');
+        switchAuthTab('login');
+    } catch (error) {
+        alert(error.message);
+    }
+});
 
 function registerUser() {
   let username = document.getElementById('username').value;
@@ -392,18 +454,28 @@ function registerUser() {
   let age = document.getElementById('age').value;
   let gender = document.getElementById('gender').value;
 
+  // Validation
   if (username === '' || password === '' || fullName === '' || age === '' || gender === '') {
       alert('Please fill in all fields.');
       return;
   }
 
+  // Check if username already exists
+  let existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+  if (existingUsers.some(user => user.username === username)) {
+      alert('Username already exists. Please choose another.');
+      return;
+  }
+
   let user = { username, password, fullName, age, gender };
-  users.push(user);
-  localStorage.setItem('users', JSON.stringify(users));
+  existingUsers.push(user);
+  localStorage.setItem('users', JSON.stringify(existingUsers));
   localStorage.setItem('currentUser', JSON.stringify(user));
+  
   alert('Registration successful!');
   closeLoginModal();
   showProfile();
+  updateNavbarForLoggedInUser();
 }
 
 function loginUser() {
@@ -411,7 +483,6 @@ function loginUser() {
   let password = document.getElementById('password').value;
 
   let users = JSON.parse(localStorage.getItem('users')) || [];
-
   let user = users.find(user => user.username === username && user.password === password);
 
   if (user) {
@@ -419,6 +490,7 @@ function loginUser() {
       alert('Login successful!');
       closeLoginModal();
       showProfile();
+      updateNavbarForLoggedInUser();
   } else {
       alert('Invalid username or password. Please try again.');
   }
@@ -427,8 +499,96 @@ function loginUser() {
 function logoutUser() {
   localStorage.removeItem('currentUser');
   alert('Logout successful!');
-  showProfile();
+  updateNavbarForLoggedOutUser();
+  showProfile(); // This will now show "Please log in" message
 }
+
+function updateNavbarForLoggedInUser() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let navbar = document.querySelector('.navbar');
+    
+    // Update navbar buttons
+    document.querySelector('button[onclick="openLoginModal()"]').style.display = 'none';
+    document.querySelector('button[onclick="openModal()"]').style.display = 'inline-block';
+    document.querySelector('button[onclick="showProfile()"]').style.display = 'inline-block';
+    document.querySelector('button[onclick="logoutUser()"]').style.display = 'inline-block';
+    
+    // Add welcome message
+    let welcomeMsg = document.createElement('span');
+    welcomeMsg.className = 'welcome-message';
+    welcomeMsg.textContent = `Welcome, ${currentUser.username}!`;
+    navbar.insertBefore(welcomeMsg, navbar.firstChild.nextSibling);
+}
+
+function updateNavbarForLoggedOutUser() {
+    // Remove welcome message if it exists
+    let welcomeMsg = document.querySelector('.welcome-message');
+    if (welcomeMsg) welcomeMsg.remove();
+    
+    // Update navbar buttons
+    document.querySelector('button[onclick="openLoginModal()"]').style.display = 'inline-block';
+    document.querySelector('button[onclick="openModal()"]').style.display = 'none';
+    document.querySelector('button[onclick="showProfile()"]').style.display = 'none';
+    document.querySelector('button[onclick="logoutUser()"]').style.display = 'none';
+}
+
+function continueAsGuest() {
+    // Create a guest user with a random ID
+    const guestUser = {
+        username: 'Guest_' + Math.random().toString(36).substr(2, 9),
+        fullName: 'Guest User',
+        age: '',
+        gender: '',
+        isGuest: true
+    };
+    
+    // Store guest user in localStorage
+    localStorage.setItem('currentUser', JSON.stringify(guestUser));
+    
+    // Update UI for guest user
+    closeLoginModal();
+    updateNavbarForGuestUser();
+    
+    // Redirect to main feed
+    document.getElementById('todo-app').style.display = 'block';
+    document.getElementById('profile-section').style.display = 'none';
+}
+
+function updateNavbarForGuestUser() {
+    let navbar = document.querySelector('.navbar');
+    
+    // Remove any existing welcome message
+    let existingWelcome = document.querySelector('.welcome-message');
+    if (existingWelcome) {
+        existingWelcome.remove();
+    }
+    
+    // Add guest welcome message
+    let welcomeMsg = document.createElement('span');
+    welcomeMsg.className = 'welcome-message';
+    welcomeMsg.textContent = 'Welcome, Guest!';
+    navbar.insertBefore(welcomeMsg, navbar.firstChild.nextSibling);
+    
+    // Update button visibility
+    document.querySelector('button[onclick="openLoginModal()"]').style.display = 'inline-block';
+    document.querySelector('button[onclick="openModal()"]').style.display = 'inline-block'; // Allow posting
+    document.querySelector('button[onclick="showProfile()"]').style.display = 'none'; // Hide profile
+    document.querySelector('button[onclick="logoutUser()"]').style.display = 'inline-block';
+}
+
+// Add this to your window.onload or at the end of your script
+function initializeApp() {
+    updateUIForAuth();
+    refreshHappenings();
+    
+    // Load existing events
+    eventManager.events.forEach(event => {
+        displayEvent(event);
+    });
+}
+
+// Call this when the page loads
+window.onload = initializeApp;
 
 function updateProfile() {
   let fullName = document.getElementById('profileFullName').value;
@@ -453,27 +613,675 @@ document.querySelector('#loginModal button[onclick="registerUser()"]').insertAdj
   <button onclick="loginUser()">Login</button>
 `);
 
+function getDirections(destinationAddress) {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                
+                // Create Google Maps URL with current location and destination
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${encodeURIComponent(destinationAddress)}`;
+                
+                // Open in new tab
+                window.open(mapsUrl, '_blank');
+            },
+            function(error) {
+                // Handle error or fallback to just destination
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destinationAddress)}`;
+                window.open(mapsUrl, '_blank');
+                console.error("Error getting location:", error);
+            }
+        );
+    } else {
+        // Fallback for browsers that don't support geolocation
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destinationAddress)}`;
+        window.open(mapsUrl, '_blank');
+    }
+}
 
-
-
-function sortComments(commentSection) {
-    let comments = Array.from(commentSection.children);
-
-    comments.sort((a, b) => {
-        let aLikes = parseInt(a.querySelector('.comment-like-count').textContent.split(' ')[0]);
-        let bLikes = parseInt(b.querySelector('.comment-like-count').textContent.split(' ')[0]);
-        return bLikes - aLikes;
-    });
-
-    comments.forEach((comment, index) => {
-        comment.classList.remove('glass-platinum', 'glass-gold', 'glass-silver');
-        if (index === 0) {
-            comment.classList.add('glass-platinum');
-        } else if (index === 1) {
-            comment.classList.add('glass-gold');
-        } else if (index === 2) {
-            comment.classList.add('glass-silver');
+function setupKeyboardNavigation() {
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeAllModals();
         }
-        commentSection.appendChild(comment);
     });
 }
+
+function validateInput(input, type) {
+    const patterns = {
+        username: /^[a-zA-Z0-9_]{3,16}$/,
+        password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    };
+    
+    return patterns[type].test(input);
+}
+
+function addToLineup() {
+    const name = document.getElementById('performer-name').value;
+    const role = document.getElementById('performer-role').value;
+    const time = document.getElementById('performer-time').value;
+    
+    if (!name || !role || !time) {
+        alert('Please fill in all lineup details');
+        return;
+    }
+    
+    const performer = {
+        id: Date.now(), // unique ID for removal
+        name: name,
+        role: role,
+        time: time
+    };
+    
+    eventLineup.push(performer);
+    updateLineupDisplay();
+    clearLineupInputs();
+}
+
+function removeFromLineup(id) {
+    eventLineup = eventLineup.filter(performer => performer.id !== id);
+    updateLineupDisplay();
+}
+
+function updateLineupDisplay() {
+    const lineupList = document.getElementById('lineup-list');
+    lineupList.innerHTML = '';
+    
+    // Sort by performance time
+    eventLineup.sort((a, b) => a.time.localeCompare(b.time));
+    
+    eventLineup.forEach(performer => {
+        const performerElement = document.createElement('div');
+        performerElement.className = 'lineup-item';
+        performerElement.innerHTML = `
+            <span class="performer-time">${performer.time}</span>
+            <span class="performer-name">${performer.name}</span>
+            <span class="performer-role">${performer.role}</span>
+            <button onclick="removeFromLineup(${performer.id})" class="remove-performer">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        lineupList.appendChild(performerElement);
+    });
+}
+
+function clearLineupInputs() {
+    document.getElementById('performer-name').value = '';
+    document.getElementById('performer-role').value = '';
+    document.getElementById('performer-time').value = '';
+}
+
+function clearForm() {
+    // ... existing clear code ...
+    eventLineup = [];
+    updateLineupDisplay();
+    clearLineupInputs();
+}
+
+function switchTab(tabId) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Deactivate all tab buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Show selected tab content and activate button
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('active');
+}
+
+// Validate all tabs before posting
+function validateTabs() {
+    // Basic Info validation
+    const title = document.getElementById('new-task').value;
+    const datetime = document.getElementById('event-datetime').value;
+    const venue = document.getElementById('venue').value;
+    
+    if (!title || !datetime || !venue) {
+        alert('Please fill in all required fields in Basic Info');
+        switchTab('basic-info');
+        return false;
+    }
+    
+    // Add other validations as needed
+    return true;
+}
+
+function toggleTicketOptions() {
+    const ticketTiers = document.getElementById('ticketTiers');
+    const isPaid = document.getElementById('paidTicket').checked;
+    ticketTiers.style.display = isPaid ? 'block' : 'none';
+}
+
+function toggleTierInputs(tier) {
+    const inputs = document.getElementById(`${tier}-inputs`);
+    const isEnabled = document.getElementById(`${tier}-enabled`).checked;
+    inputs.style.display = isEnabled ? 'block' : 'none';
+}
+
+// Add to your existing addTask function
+function getTicketInfo() {
+    const ticketInfo = {
+        isFree: document.getElementById('freeTicket').checked,
+        tiers: {}
+    };
+
+    if (!ticketInfo.isFree) {
+        // Standard Entry
+        ticketInfo.tiers.standard = {
+            price: document.getElementById('standard-price').value,
+            quantity: document.getElementById('standard-quantity').value
+        };
+
+        // VIP
+        if (document.getElementById('vip-enabled').checked) {
+            ticketInfo.tiers.vip = {
+                price: document.getElementById('vip-price').value,
+                quantity: document.getElementById('vip-quantity').value,
+                perks: document.getElementById('vip-perks').value
+            };
+        }
+
+        // VVIP
+        if (document.getElementById('vvip-enabled').checked) {
+            ticketInfo.tiers.vvip = {
+                price: document.getElementById('vvip-price').value,
+                quantity: document.getElementById('vvip-quantity').value,
+                perks: document.getElementById('vvip-perks').value
+            };
+        }
+    }
+
+    return ticketInfo;
+}
+
+function handleImageUpload(event) {
+    const files = event.target.files;
+    const previewContainer = document.querySelector('.image-preview-container');
+    const currentImages = previewContainer.children.length;
+
+    if (currentImages + files.length > MAX_IMAGES) {
+        alert(`You can only upload a maximum of ${MAX_IMAGES} images`);
+        return;
+    }
+
+    Array.from(files).forEach(file => {
+        if (file.size > MAX_IMAGE_SIZE) {
+            alert(`Image ${file.name} exceeds 5MB limit`);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.createElement('div');
+            preview.className = 'media-preview';
+            preview.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <div class="media-overlay">
+                    <button onclick="removeMedia(this.parentElement.parentElement)" class="remove-media">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            previewContainer.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function handleVideoUpload(event) {
+    const files = event.target.files;
+    const previewContainer = document.querySelector('.video-preview-container');
+    const currentVideos = previewContainer.children.length;
+
+    if (currentVideos + files.length > MAX_VIDEOS) {
+        alert(`You can only upload a maximum of ${MAX_VIDEOS} videos`);
+        return;
+    }
+
+    Array.from(files).forEach(file => {
+        if (file.size > MAX_VIDEO_SIZE) {
+            alert(`Video ${file.name} exceeds 50MB limit`);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.createElement('div');
+            preview.className = 'media-preview';
+            preview.innerHTML = `
+                <video controls>
+                    <source src="${e.target.result}" type="${file.type}">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="media-overlay">
+                    <button onclick="removeMedia(this.parentElement.parentElement)" class="remove-media">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            previewContainer.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeMedia(element) {
+    element.remove();
+}
+
+function createPostHTML(data) {
+    return `
+        <div class="post-container">
+            <!-- Header Section -->
+            <div class="post-header">
+                <div class="post-author">
+                    <img src="path/to/default-avatar.png" alt="TEARN" class="author-avatar">
+                    <div class="author-info">
+                        <span class="author-name">TEARN</span>
+                        <span class="post-timestamp" data-time="${data.timestamp.toISOString()}">${timeSince(data.timestamp)}</span>
+                    </div>
+                </div>
+                <div class="post-options">
+                    <button class="options-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </div>
+
+            <!-- Title Section -->
+            <div class="post-title">
+                <h2>${data.taskText}</h2>
+            </div>
+
+            <!-- Media Gallery -->
+            ${createMediaGalleryHTML(data.mediaElements)}
+
+            <!-- Event Details Section -->
+            <div class="event-details">
+                <div class="detail-item">
+                    <i class="far fa-calendar-alt"></i>
+                    <div class="detail-content">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value">${new Date(data.datetime).toLocaleString()}</span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-tag"></i>
+                    <div class="detail-content">
+                        <span class="detail-label">Event Type</span>
+                        <span class="detail-value">${data.eventType}</span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="detail-content">
+                        <span class="detail-label">Venue</span>
+                        <span class="detail-value">${data.venue}</span>
+                        <button class="direction-button" onclick="getDirections('${data.venue}')">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Information -->
+            <div class="ticket-section">
+                ${createTicketInfoHTML(data.ticketInfo)}
+            </div>
+
+            <!-- Lineup Section -->
+            ${createLineupHTML(data.eventLineup)}
+
+            <!-- Engagement Section -->
+            <div class="post-engagement">
+                <div class="engagement-stats">
+                    <span class="like-count">0 likes</span>
+                    <span class="comment-count">0 comments</span>
+                </div>
+                <div class="engagement-actions">
+                    <button onclick="toggleLike(this)" class="action-button like-button">
+                        <i class="far fa-heart"></i> Like
+                    </button>
+                    <button onclick="toggleComment(this)" class="action-button comment-button">
+                        <i class="far fa-comment"></i> Comment
+                    </button>
+                    <button onclick="toggleSave(this)" class="action-button save-button">
+                        <i class="far fa-bookmark"></i> Save
+                    </button>
+                    <button onclick="sharePost(this)" class="action-button share-button">
+                        <i class="far fa-share-square"></i> Share
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comment-input-container">
+                    <img src="path/to/user-avatar.png" alt="User" class="comment-avatar">
+                    <input type="text" class="comment-input" placeholder="Write a comment...">
+                    <button class="comment-submit">
+                        <i class="far fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="comments-container"></div>
+            </div>
+        </div>
+    `;
+}
+
+// Helper functions for creating different sections
+function createMediaGalleryHTML(mediaElements) {
+    if (mediaElements.length === 0) return '';
+    
+    return `
+        <div class="media-gallery ${mediaElements.length === 1 ? 'single' : 'grid'}">
+            ${mediaElements.join('')}
+        </div>
+    `;
+}
+
+function createTicketInfoHTML(ticketInfo) {
+    if (ticketInfo.isFree) {
+        return `
+            <div class="ticket-banner free">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Free Entry</span>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="ticket-tiers">
+            <h3>Ticket Information</h3>
+            <div class="tier standard">
+                <div class="tier-header">
+                    <span class="tier-name">Standard Entry</span>
+                    <span class="tier-price">R${ticketInfo.tiers.standard.price}</span>
+                </div>
+                <div class="tier-availability">
+                    ${ticketInfo.tiers.standard.quantity} tickets available
+                </div>
+            </div>
+            ${ticketInfo.tiers.vip ? createVIPTierHTML(ticketInfo.tiers.vip, 'VIP') : ''}
+            ${ticketInfo.tiers.vvip ? createVIPTierHTML(ticketInfo.tiers.vvip, 'VVIP') : ''}
+        </div>
+    `;
+}
+
+function createVIPTierHTML(tier, type) {
+    return `
+        <div class="tier ${type.toLowerCase()}">
+            <div class="tier-header">
+                <span class="tier-name">${type}</span>
+                <div class="tier-pricing">
+                    <div class="price-breakdown">
+                        <span>Ticket: R${tier.price}</span>
+                        <span>Entry Fee: R${tier.entryFee}</span>
+                    </div>
+                    <span class="total-price">Total: R${tier.totalPrice}</span>
+                </div>
+            </div>
+            <div class="tier-availability">
+                ${tier.quantity} tickets available
+            </div>
+            <div class="tier-perks">
+                <i class="fas fa-star"></i> ${tier.perks}
+            </div>
+        </div>
+    `;
+}
+
+function createLineupHTML(lineup) {
+    if (!lineup || lineup.length === 0) return '';
+
+    return `
+        <div class="lineup-section">
+            <h3>Event Line-up</h3>
+            <div class="lineup-timeline">
+                ${lineup.map(performer => `
+                    <div class="lineup-item">
+                        <span class="time">${performer.time}</span>
+                        <div class="performer-info">
+                            <span class="name">${performer.name}</span>
+                            <span class="role">${performer.role}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function categorizeHappenings() {
+    const now = new Date();
+    const allPosts = document.querySelectorAll('#task-list li');
+    const weekly = [];
+    const monthly = [];
+    const yearly = [];
+
+    allPosts.forEach(post => {
+        const dateStr = post.querySelector('[data-time]').dataset.time;
+        const eventDate = new Date(dateStr);
+        const diffDays = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+
+        const eventSummary = createEventSummary(post);
+
+        if (diffDays <= 7) {
+            weekly.push(eventSummary);
+        } else if (diffDays <= 30) {
+            monthly.push(eventSummary);
+        } else {
+            yearly.push(eventSummary);
+        }
+    });
+
+    updateHappeningsList('weekly-happenings', weekly);
+    updateHappeningsList('monthly-happenings', monthly);
+    updateHappeningsList('yearly-happenings', yearly);
+}
+
+function createEventSummary(post) {
+    const title = post.querySelector('.post-title').textContent;
+    const date = post.querySelector('[data-time]').dataset.time;
+    const venue = post.querySelector('.detail-value').textContent;
+
+    return `
+        <div class="happening-item">
+            <div class="happening-date">${formatDate(new Date(date))}</div>
+            <div class="happening-title">${title}</div>
+            <div class="happening-venue">${venue}</div>
+        </div>
+    `;
+}
+
+function updateHappeningsList(id, events) {
+    const container = document.getElementById(id);
+    if (events.length === 0) {
+        container.innerHTML = '<div class="no-events">No upcoming events</div>';
+    } else {
+        container.innerHTML = events.join('');
+    }
+}
+
+function formatDate(date) {
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Call this after adding new posts
+function refreshHappenings() {
+    categorizeHappenings();
+}
+
+// Update UI based on auth state
+function updateUIForAuth() {
+    const user = userManager.currentUser;
+    const authButtons = document.querySelectorAll('.auth-dependent');
+    const profileSection = document.querySelector('.profile-section');
+
+    if (user) {
+        // Update profile section
+        document.querySelector('.profile-name').textContent = user.username;
+        document.querySelector('.profile-avatar').src = user.avatar;
+        document.querySelector('.stat-value.posts').textContent = user.posts.length;
+        document.querySelector('.stat-value.saved').textContent = user.savedEvents.length;
+
+        // Show auth-dependent elements
+        authButtons.forEach(btn => btn.style.display = 'block');
+        profileSection.style.display = 'block';
+    } else {
+        // Hide auth-dependent elements
+        authButtons.forEach(btn => btn.style.display = 'none');
+        profileSection.style.display = 'none';
+    }
+}
+
+function validateLoginForm() {
+    const email = document.getElementById('loginEmail');
+    const password = document.getElementById('loginPassword');
+    let isValid = true;
+
+    // Reset previous errors
+    clearErrors();
+
+    // Email validation
+    if (!email.value) {
+        showError(email, 'Email is required');
+        isValid = false;
+    } else if (!isValidEmail(email.value)) {
+        showError(email, 'Please enter a valid email');
+        isValid = false;
+    }
+
+    // Password validation
+    if (!password.value) {
+        showError(password, 'Password is required');
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function validateRegisterForm() {
+    const fullName = document.getElementById('regFullName');
+    const email = document.getElementById('regEmail');
+    const phone = document.getElementById('regPhone');
+    const password = document.getElementById('regPassword');
+    const confirmPassword = document.getElementById('regConfirmPassword');
+    let isValid = true;
+
+    // Reset previous errors
+    clearErrors();
+
+    // Full Name validation
+    if (!fullName.value.trim()) {
+        showError(fullName, 'Full name is required');
+        isValid = false;
+    }
+
+    // Email validation
+    if (!email.value) {
+        showError(email, 'Email is required');
+        isValid = false;
+    } else if (!isValidEmail(email.value)) {
+        showError(email, 'Please enter a valid email');
+        isValid = false;
+    }
+
+    // Phone validation
+    if (!phone.value) {
+        showError(phone, 'Phone number is required');
+        isValid = false;
+    } else if (!isValidPhone(phone.value)) {
+        showError(phone, 'Please enter a valid phone number');
+        isValid = false;
+    }
+
+    // Password validation
+    if (!password.value) {
+        showError(password, 'Password is required');
+        isValid = false;
+    } else if (password.value.length < 8) {
+        showError(password, 'Password must be at least 8 characters');
+        isValid = false;
+    }
+
+    // Confirm Password validation
+    if (password.value !== confirmPassword.value) {
+        showError(confirmPassword, 'Passwords do not match');
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function showError(input, message) {
+    const formGroup = input.closest('.form-group');
+    formGroup.classList.add('error');
+    const error = document.createElement('div');
+    error.className = 'error-message';
+    error.textContent = message;
+    formGroup.appendChild(error);
+}
+
+function clearErrors() {
+    document.querySelectorAll('.form-group').forEach(group => {
+        group.classList.remove('error');
+        const error = group.querySelector('.error-message');
+        if (error) error.remove();
+    });
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isValidPhone(phone) {
+    return /^\+?[\d\s-]{10,}$/.test(phone);
+}
+
+// Update event listeners
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (validateLoginForm()) {
+        // Proceed with login
+        const submitButton = this.querySelector('.auth-submit');
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            // Add your login logic here
+        }, 1500);
+    }
+});
+
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (validateRegisterForm()) {
+        // Proceed with registration
+        const submitButton = this.querySelector('.auth-submit');
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            // Add your registration logic here
+        }, 1500);
+    }
+});

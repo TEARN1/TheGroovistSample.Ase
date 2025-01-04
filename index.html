@@ -3,6 +3,7 @@
 <head>
     <title>The Gruvist</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="navbar">
@@ -12,66 +13,181 @@
         <button onclick="showProfile()">Profile</button>
         <button onclick="logoutUser()">Logout</button>
     </div>
-    <div id="todo-app">
-        <ul id="task-list"></ul>
-    </div>
+    <div class="main-container">
+        <!-- Left Sidebar - Happenings -->
+        <div class="sidebar left-sidebar">
+            <div class="happenings-section">
+                <h2>Happenings</h2>
+                
+                <!-- Weekly Happenings -->
+                <div class="happening-category">
+                    <div class="category-header" onclick="toggleHappenings('weekly')">
+                        <h3>Weekly Happenings</h3>
+                        <span class="event-count">0 events</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="happening-list" id="weekly-happenings">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
 
-    <div id="profile-section" style="display:none;">
-        <h2>Profile</h2>
-        <div id="profile-info">
-            <!-- User information will be displayed here -->
+                <!-- Monthly Happenings -->
+                <div class="happening-category">
+                    <div class="category-header" onclick="toggleHappenings('monthly')">
+                        <h3>Monthly Happenings</h3>
+                        <span class="event-count">0 events</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="happening-list" id="monthly-happenings">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Yearly Happenings -->
+                <div class="happening-category">
+                    <div class="category-header" onclick="toggleHappenings('yearly')">
+                        <h3>Yearly Happenings</h3>
+                        <span class="event-count">0 events</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="happening-list" id="yearly-happenings">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="tabs">
-            <button class="tab-link" onclick="openTab(event, 'Liked')">Liked</button>
-            <button class="tab-link" onclick="openTab(event, 'Saved')">Saved</button>
-            <button class="tab-link" onclick="openTab(event, 'Notifications')">Notifications</button>
+
+        <!-- Middle Section - Posts Feed -->
+        <div class="main-content">
+            <div id="todo-app">
+                <ul id="task-list"></ul>
+            </div>
         </div>
-        <div id="Liked" class="tab-content" style="display:none;">
-            <h3>Liked Posts</h3>
-            <ul id="liked-posts-list"></ul>
+
+        <!-- Right Sidebar - User Profile -->
+        <div class="sidebar right-sidebar">
+            <div class="profile-section">
+                <div class="profile-header">
+                    <img src="path/to/default-avatar.png" alt="Profile" class="profile-avatar">
+                    <div class="profile-info">
+                        <h3 class="profile-name">User Name</h3>
+                        <span class="profile-status">Online</span>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Events</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Saved</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button onclick="editProfile()">Edit Profile</button>
+                    <button onclick="viewSaved()">Saved Events</button>
+                    <button onclick="logoutUser()">Logout</button>
+                </div>
+            </div>
         </div>
-        <div id="Saved" class="tab-content" style="display:none;">
-            <h3>Saved Posts</h3>
-            <ul id="saved-posts-list"></ul>
-        </div>
-        <div id="Notifications" class="tab-content" style="display:none;">
-            <h3>Notifications</h3>
-            <ul id="notifications-list"></ul>
-        </div>
-        <div id="profile-update">
-            <h3>Update Profile</h3>
-            <input type="text" id="profileFullName" placeholder="Full Name">
-            <input type="number" id="profileAge" placeholder="Age" min="0">
-            <select id="profileGender">
-                <option value="" disabled selected>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="non-binary">Non-Binary</option>
-                <option value="prefer-not-to-say">Prefer Not to Say</option>
-            </select>
-            <button onclick="updateProfile()">Update Profile</button>
-        </div>
-        <button onclick="showProfile()">Back to Posts</button>
     </div>
 
     <!-- Login/Register Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
-            <h2>Login/Register</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <input type="text" id="fullName" placeholder="Full Name">
-            <input type="number" id="age" placeholder="Age" min="0">
-            <select id="gender">
-                <option value="" disabled selected>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="non-binary">Non-Binary</option>
-                <option value="prefer-not-to-say">Prefer Not to Say</option>
-            </select>
-            <button onclick="registerUser()">Register</button>
-            <button onclick="loginUser()">Login</button>
+    <div id="loginModal" class="auth-modal">
+        <div class="auth-container">
+            <span class="close-auth" onclick="closeLoginModal()">&times;</span>
+            
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab-btn" onclick="switchAuthTab('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginTab" class="auth-tab-content active">
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to continue to TEARN</p>
+                
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-input">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="auth-submit">Sign In</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerTab" class="auth-tab-content">
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Join TEARN today</p>
+                
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="regFullName">Full Name</label>
+                        <input type="text" id="regFullName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <div class="password-input">
+                            <input type="password" id="regPassword" placeholder="Create a password" required>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <div class="password-input">
+                            <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="terms-privacy">
+                        <label class="checkbox-label">
+                            <input type="checkbox" required>
+                            <span>I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-submit">Create Account</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -79,133 +195,250 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Add a New Event</h2>
-            <input type="text" id="new-task" placeholder="Event Title">
-            <input type="datetime-local" id="event-datetime">
-            <select id="event-type" onchange="toggleCustomEventInput()">
-                <option value="" disabled selected>Select Event Type</option>
-                <option value="concert">Concert</option>
-                <option value="conference">Conference</option>
-                <option value="sports">Sports</option>
-                <option value="festival">Festival</option>
-                <option value="meetup">Meetup</option>
-                <option value="theater">Theater</option>
-                <option value="workshop">Workshop</option>
-                <option value="webinar">Webinar</option>
-                <option value="party">Party</option>
-                <option value="exhibition">Exhibition</option>
-                <option value="children-birthday">Children's Birthday Party</option>
-                <option value="adult-birthday">Adult Birthday Party</option>
-                <option value="milestone-birthday">Milestone Birthday Party</option>
-                <option value="wedding-anniversary">Wedding Anniversary</option>
-                <option value="dating-anniversary">Dating Anniversary</option>
-                <option value="friendship-anniversary">Friendship Anniversary</option>
-                <option value="traditional-wedding">Traditional Wedding</option>
-                <option value="destination-wedding">Destination Wedding</option>
-                <option value="civil-ceremony">Civil Ceremony</option>
-                <option value="elopement">Elopement</option>
-                <option value="gender-reveal">Gender Reveal Party</option>
-                <option value="co-ed-baby-shower">Co-ed Baby Shower</option>
-                <option value="virtual-baby-shower">Virtual Baby Shower</option>
-                <option value="high-school-graduation">High School Graduation</option>
-                <option value="college-graduation">College Graduation</option>
-                <option value="masters-graduation">Master's Degree Graduation</option>
-                <option value="phd-graduation">PhD Graduation</option>
-                <option value="office-retirement">Office Retirement Party</option>
-                <option value="family-retirement">Family Retirement Party</option>
-                <option value="surprise-retirement">Surprise Retirement Party</option>
-                <option value="formal-engagement">Formal Engagement Party</option>
-                <option value="casual-engagement">Casual Engagement Party</option>
-                <option value="surprise-engagement">Surprise Engagement Party</option>
-                <option value="potluck-housewarming">Potluck Housewarming Party</option>
-                <option value="cocktail-housewarming">Cocktail Housewarming Party</option>
-                <option value="dinner-housewarming">Dinner Housewarming Party</option>
-                <option value="christmas-party">Christmas Party</option>
-                <option value="new-year-party">New Year's Eve Party</option>
-                <option value="thanksgiving-party">Thanksgiving Party</option>
-                <option value="hanukkah-party">Hanukkah Party</option>
-                <option value="diwali-party">Diwali Party</option>
-                <option value="formal-cocktail">Formal Cocktail Party</option>
-                <option value="casual-cocktail">Casual Cocktail Party</option>
-                <option value="themed-cocktail">Themed Cocktail Party</option>
-                <option value="formal-dinner">Formal Dinner Party</option>
-                <option value="casual-dinner">Casual Dinner Party</option>
-                <option value="potluck-dinner">Potluck Dinner Party</option>
-                <option value="board-game-night">Board Game Night</option>
-                <option value="video-game-night">Video Game Night</option>
-                <option value="card-game-night">Card Game Night</option>
-                <option value="classic-movie-night">Classic Movie Night</option>
-                <option value="themed-movie-night">Themed Movie Night</option>
-                <option value="outdoor-movie-night">Outdoor Movie Night</option>
-                <option value="fiction-book-club">Fiction Book Club</option>
-                <option value="non-fiction-book-club">Non-Fiction Book Club</option>
-                <option value="genre-book-club">Genre-Specific Book Club</option>
-                <option value="holiday-potluck">Holiday Potluck</option>
-                <option value="birthday-potluck">Birthday Potluck</option>
-                <option value="neighborhood-potluck">Neighborhood Potluck</option>
-                <option value="halloween-party">Halloween Party</option>
-                <option value="masquerade-ball">Masquerade Ball</option>
-                <option value="luau-party">Luau Party</option>
-                <option value="80s-party">80s Party</option>
-                <option value="90s-party">90s Party</option>
-                <option value="high-school-reunion">High School Reunion</option>
-                <option value="college-reunion">College Reunion</option>
-                <option value="family-reunion">Family Reunion</option>
-                <option value="military-reunion">Military Reunion</option>
-                <option value="industry-conference">Industry Conference</option>
-                <option value="academic-conference">Academic Conference</option>
-                <option value="technical-conference">Technical Conference</option>
-                <option value="training-seminar">Training Seminar</option>
-                <option value="informational-seminar">Informational Seminar</option>                <option value="press-conference">Press Conference</option>
-                <option value="product-demo">Product Demonstration</option>
-                <option value="virtual-launch">Virtual Product Launch</option>
-                <option value="industry-mixer">Industry Mixer</option>
-                <option value="chamber-event">Chamber of Commerce Event</option>
-                <option value="alumni-event">Alumni Event</option>
-                <option value="team-building-event">Team-Building Event</option>
-                <option value="holiday-party">Corporate Holiday Party</option>
-                <option value="awards-ceremony">Awards Ceremony</option>
-                <option value="music-festival">Music Festival</option>
-                <option value="food-festival">Food Festival</option>
-                <option value="art-festival">Art Festival</option>
-                <option value="cultural-festival">Cultural Festival</option>
-                <option value="fundraiser">Fundraiser</option>
-                <option value="charity-gala">Charity Gala</option>
-                <option value="charity-auction">Charity Auction</option>
-                <option value="neighborhood-meeting">Neighborhood Watch Meeting</option>
-                <option value="community-cleanup">Community Clean-up Day</option>
-                <option value="community-picnic">Community Picnic</option>
-                <option value="street-festival">Street Festival</option>
-                <option value="neighborhood-barbecue">Neighborhood Barbecue</option>
-                <option value="block-party-game">Block Party Game</option>
-                <option value="rock-concert">Rock Concert</option>
-                <option value="pop-concert">Pop Concert</option>
-                <option value="classical-concert">Classical Concert</option>
-                <option value="jazz-concert">Jazz Concert</option>
-                <option value="football-game">Football Game</option>
-                <option value="basketball-game">Basketball Game</option>
-                <option value="baseball-game">Baseball Game</option>
-                <option value="soccer-game">Soccer Game</option>
-                <option value="play">Play</option>
-                <option value="musical">Musical</option>
-                <option value="opera">Opera</option>
-                <option value="painting-exhibition">Painting Exhibition</option>
-                <option value="sculpture-exhibition">Sculpture Exhibition</option>
-                <option value="photography-exhibition">Photography Exhibition</option>
-                <option value="food-truck-festival">Food Truck Festival</option>
-                <option value="wine-festival">Wine Festival</option>
-                <option value="beer-festival">Beer Festival</option>
-                <option value="electronic-music-festival">Electronic Music Festival</option>
-                <option value="country-music-festival">Country Music Festival</option>
-                <option value="rock-music-festival">Rock Music Festival</option>
-                <option value="other">Other</option>
-            </select>
-            <input type="text" id="custom-event-type" placeholder="Enter custom event type" style="display: none;">
-            <input type="number" id="ticket-price" placeholder="Ticket Price" min="0">
-            <input type="file" id="img-upload" accept="image/*">
-            <button onclick="addTask()">Post</button>
+            
+            <!-- Tab Navigation -->
+            <div class="modal-tabs">
+                <button class="tab-button active" onclick="switchTab('basic-info')">Basic Info</button>
+                <button class="tab-button" onclick="switchTab('lineup')">Line-up</button>
+                <button class="tab-button" onclick="switchTab('tickets')">Tickets</button>
+                <button class="tab-button" onclick="switchTab('media')">Media</button>
+            </div>
+
+            <!-- Basic Info Tab -->
+            <div id="basic-info" class="tab-content active">
+                <input type="text" id="new-task" placeholder="Event Title">
+                <input type="datetime-local" id="event-datetime">
+                <select id="event-type" onchange="toggleCustomEventInput()">
+                    <option value="" disabled selected>Select Event Type</option>
+                    <option value="concert">Concert</option>
+                    <option value="conference">Conference</option>
+                    <option value="sports">Sports</option>
+                    <option value="festival">Festival</option>
+                    <option value="meetup">Meetup</option>
+                    <option value="theater">Theater</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="webinar">Webinar</option>
+                    <option value="party">Party</option>
+                    <option value="exhibition">Exhibition</option>
+                    <option value="children-birthday">Children's Birthday Party</option>
+                    <option value="adult-birthday">Adult Birthday Party</option>
+                    <option value="milestone-birthday">Milestone Birthday Party</option>
+                    <option value="wedding-anniversary">Wedding Anniversary</option>
+                    <option value="dating-anniversary">Dating Anniversary</option>
+                    <option value="friendship-anniversary">Friendship Anniversary</option>
+                    <option value="traditional-wedding">Traditional Wedding</option>
+                    <option value="destination-wedding">Destination Wedding</option>
+                    <option value="civil-ceremony">Civil Ceremony</option>
+                    <option value="elopement">Elopement</option>
+                    <option value="gender-reveal">Gender Reveal Party</option>
+                    <option value="co-ed-baby-shower">Co-ed Baby Shower</option>
+                    <option value="virtual-baby-shower">Virtual Baby Shower</option>
+                    <option value="high-school-graduation">High School Graduation</option>
+                    <option value="college-graduation">College Graduation</option>
+                    <option value="masters-graduation">Master's Degree Graduation</option>
+                    <option value="phd-graduation">PhD Graduation</option>
+                    <option value="office-retirement">Office Retirement Party</option>
+                    <option value="family-retirement">Family Retirement Party</option>
+                    <option value="surprise-retirement">Surprise Retirement Party</option>
+                    <option value="formal-engagement">Formal Engagement Party</option>
+                    <option value="casual-engagement">Casual Engagement Party</option>
+                    <option value="surprise-engagement">Surprise Engagement Party</option>
+                    <option value="potluck-housewarming">Potluck Housewarming Party</option>
+                    <option value="cocktail-housewarming">Cocktail Housewarming Party</option>
+                    <option value="dinner-housewarming">Dinner Housewarming Party</option>
+                    <option value="christmas-party">Christmas Party</option>
+                    <option value="new-year-party">New Year's Eve Party</option>
+                    <option value="thanksgiving-party">Thanksgiving Party</option>
+                    <option value="hanukkah-party">Hanukkah Party</option>
+                    <option value="diwali-party">Diwali Party</option>
+                    <option value="formal-cocktail">Formal Cocktail Party</option>
+                    <option value="casual-cocktail">Casual Cocktail Party</option>
+                    <option value="themed-cocktail">Themed Cocktail Party</option>
+                    <option value="formal-dinner">Formal Dinner Party</option>
+                    <option value="casual-dinner">Casual Dinner Party</option>
+                    <option value="potluck-dinner">Potluck Dinner Party</option>
+                    <option value="board-game-night">Board Game Night</option>
+                    <option value="video-game-night">Video Game Night</option>
+                    <option value="card-game-night">Card Game Night</option>
+                    <option value="classic-movie-night">Classic Movie Night</option>
+                    <option value="themed-movie-night">Themed Movie Night</option>
+                    <option value="outdoor-movie-night">Outdoor Movie Night</option>
+                    <option value="fiction-book-club">Fiction Book Club</option>
+                    <option value="non-fiction-book-club">Non-Fiction Book Club</option>
+                    <option value="genre-book-club">Genre-Specific Book Club</option>
+                    <option value="holiday-potluck">Holiday Potluck</option>
+                    <option value="birthday-potluck">Birthday Potluck</option>
+                    <option value="neighborhood-potluck">Neighborhood Potluck</option>
+                    <option value="halloween-party">Halloween Party</option>
+                    <option value="masquerade-ball">Masquerade Ball</option>
+                    <option value="luau-party">Luau Party</option>
+                    <option value="80s-party">80s Party</option>
+                    <option value="90s-party">90s Party</option>
+                    <option value="high-school-reunion">High School Reunion</option>
+                    <option value="college-reunion">College Reunion</option>
+                    <option value="family-reunion">Family Reunion</option>
+                    <option value="military-reunion">Military Reunion</option>
+                    <option value="industry-conference">Industry Conference</option>
+                    <option value="academic-conference">Academic Conference</option>
+                    <option value="technical-conference">Technical Conference</option>
+                    <option value="training-seminar">Training Seminar</option>
+                    <option value="informational-seminar">Informational Seminar</option>                <option value="press-conference">Press Conference</option>
+                    <option value="product-demo">Product Demonstration</option>
+                    <option value="virtual-launch">Virtual Product Launch</option>
+                    <option value="industry-mixer">Industry Mixer</option>
+                    <option value="chamber-event">Chamber of Commerce Event</option>
+                    <option value="alumni-event">Alumni Event</option>
+                    <option value="team-building-event">Team-Building Event</option>
+                    <option value="holiday-party">Corporate Holiday Party</option>
+                    <option value="awards-ceremony">Awards Ceremony</option>
+                    <option value="music-festival">Music Festival</option>
+                    <option value="food-festival">Food Festival</option>
+                    <option value="art-festival">Art Festival</option>
+                    <option value="cultural-festival">Cultural Festival</option>
+                    <option value="fundraiser">Fundraiser</option>
+                    <option value="charity-gala">Charity Gala</option>
+                    <option value="charity-auction">Charity Auction</option>
+                    <option value="neighborhood-meeting">Neighborhood Watch Meeting</option>
+                    <option value="community-cleanup">Community Clean-up Day</option>
+                    <option value="community-picnic">Community Picnic</option>
+                    <option value="street-festival">Street Festival</option>
+                    <option value="neighborhood-barbecue">Neighborhood Barbecue</option>
+                    <option value="block-party-game">Block Party Game</option>
+                    <option value="rock-concert">Rock Concert</option>
+                    <option value="pop-concert">Pop Concert</option>
+                    <option value="classical-concert">Classical Concert</option>
+                    <option value="jazz-concert">Jazz Concert</option>
+                    <option value="football-game">Football Game</option>
+                    <option value="basketball-game">Basketball Game</option>
+                    <option value="baseball-game">Baseball Game</option>
+                    <option value="soccer-game">Soccer Game</option>
+                    <option value="play">Play</option>
+                    <option value="musical">Musical</option>
+                    <option value="opera">Opera</option>
+                    <option value="painting-exhibition">Painting Exhibition</option>
+                    <option value="sculpture-exhibition">Sculpture Exhibition</option>
+                    <option value="photography-exhibition">Photography Exhibition</option>
+                    <option value="food-truck-festival">Food Truck Festival</option>
+                    <option value="wine-festival">Wine Festival</option>
+                    <option value="beer-festival">Beer Festival</option>
+                    <option value="electronic-music-festival">Electronic Music Festival</option>
+                    <option value="country-music-festival">Country Music Festival</option>
+                    <option value="rock-music-festival">Rock Music Festival</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="text" id="custom-event-type" placeholder="Enter custom event type" style="display: none;">
+                <input type="text" id="venue" placeholder="Enter venue address">
+            </div>
+
+            <!-- Lineup Tab -->
+            <div id="lineup" class="tab-content">
+                <div class="lineup-inputs">
+                    <input type="text" id="performer-name" placeholder="Performer/Guest Name">
+                    <input type="text" id="performer-role" placeholder="Role (e.g., DJ, Speaker, Artist)">
+                    <input type="time" id="performer-time" placeholder="Performance Time">
+                    <button type="button" onclick="addToLineup()">Add to Lineup</button>
+                </div>
+                <div id="lineup-list"></div>
+            </div>
+
+            <!-- Tickets Tab -->
+            <div id="tickets" class="tab-content">
+                <div class="ticket-type">
+                    <input type="radio" name="ticketType" value="free" id="freeTicket" checked onchange="toggleTicketOptions()">
+                    <label for="freeTicket">Free Event</label>
+                    <input type="radio" name="ticketType" value="paid" id="paidTicket" onchange="toggleTicketOptions()">
+                    <label for="paidTicket">Paid Event</label>
+                </div>
+                
+                <div id="ticketTiers" style="display: none;">
+                    <!-- Standard Entry -->
+                    <div class="ticket-tier">
+                        <h4>Standard Entry</h4>
+                        <input type="number" id="standard-price" placeholder="Price (R)" min="0">
+                        <input type="number" id="standard-quantity" placeholder="Available Tickets" min="0">
+                    </div>
+
+                    <!-- VIP Section -->
+                    <div class="ticket-tier">
+                        <div class="tier-header">
+                            <input type="checkbox" id="vip-enabled" onchange="toggleTierInputs('vip')">
+                            <h4>VIP</h4>
+                        </div>
+                        <div class="tier-inputs" id="vip-inputs" style="display: none;">
+                            <input type="number" id="vip-price" placeholder="VIP Price (R)" min="0">
+                            <input type="number" id="vip-quantity" placeholder="VIP Tickets Available" min="0">
+                            <textarea id="vip-perks" placeholder="VIP Perks (e.g., Free drinks, Meet & Greet)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- VVIP Section -->
+                    <div class="ticket-tier">
+                        <div class="tier-header">
+                            <input type="checkbox" id="vvip-enabled" onchange="toggleTierInputs('vvip')">
+                            <h4>VVIP</h4>
+                        </div>
+                        <div class="tier-inputs" id="vvip-inputs" style="display: none;">
+                            <input type="number" id="vvip-price" placeholder="VVIP Price (R)" min="0">
+                            <input type="number" id="vvip-quantity" placeholder="VVIP Tickets Available" min="0">
+                            <textarea id="vvip-perks" placeholder="VVIP Perks (e.g., Private table, Exclusive access)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media Tab -->
+            <div id="media" class="tab-content">
+                <div class="media-upload-section">
+                    <div class="upload-buttons">
+                        <label for="img-upload" class="upload-label">
+                            <i class="fas fa-image"></i> Add Images
+                            <input type="file" id="img-upload" accept="image/*" multiple onchange="handleImageUpload(event)">
+                        </label>
+                        <label for="video-upload" class="upload-label">
+                            <i class="fas fa-video"></i> Add Videos
+                            <input type="file" id="video-upload" accept="video/*" multiple onchange="handleVideoUpload(event)">
+                        </label>
+                    </div>
+                    
+                    <div class="upload-limits">
+                        <small>Limits: Images (max 5, each ≤ 5MB) | Videos (max 2, each ≤ 50MB)</small>
+                    </div>
+
+                    <div class="preview-section">
+                        <div class="image-preview-container"></div>
+                        <div class="video-preview-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post Button - Always Visible -->
+            <div class="modal-footer">
+                <button onclick="addTask()" class="post-button">Post Event</button>
+            </div>
         </div>
     </div>
 
     <script src="app.js"></script>
 </body>
 </html>
+
+
+
+
+this.testProfiles = 
+
+    admin: {
+        email: 'admin@test.com',
+        password: 'admin123',
+        role: 'admin'
+    },
+    user: {
+        email: 'user@test.com',
+        password: 'user123',
+        role: 'user'
+    },
+    organizer: {
+        email: 'organizer@test.com',
+        password: 'organizer123',
+        role: 'organizer'
+    }
