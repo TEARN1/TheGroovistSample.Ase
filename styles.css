@@ -1,0 +1,191 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #111;
+  background-image: url('background.jpg');
+  background-size: cover;
+  color: #fff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+}
+
+.nav-link:hover {
+  background-color: #ff69b4;
+  border-radius: 5px;
+}
+
+.glass-effect {
+  background: rgba(255, 192, 203, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 80px auto 20px auto;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 192, 203, 0.3);
+}
+
+/* Authentication Form Styles */
+.auth-form {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-form h3 {
+  color: #fff;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: none;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #ff1493;
+}
+
+/* Event Submission Form Styles */
+#eventForm input,
+#eventForm textarea,
+#eventForm select,
+#eventForm button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: none;
+}
+
+#eventForm button {
+  background-color: #ff69b4;
+  color: white;
+  cursor: pointer;
+}
+
+#eventForm button:hover {
+  background-color: #ff1493;
+}
+
+/* New Optional Fields */
+#guestSpeaker,
+#wordOfTheDay {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 192, 203, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  color: #fff;
+}
+
+/* Promote Event Section */
+.promote-section {
+  margin: 20px 0;
+}
+.promote-section label {
+  margin-left: 10px;
+}
+
+/* Event & Job List Items */
+#eventList .event-item,
+#jobList .job-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Event Actions (Share, Save, Repost, Directions, etc.) */
+.event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.event-actions button {
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1 1 auto;
+}
+
+.event-actions button:hover {
+  background-color: #ff1493;
+}
+
+/* Job Posting Styles */
+#jobPostings {
+  margin-top: 20px;
+}
+
+#jobForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#jobForm input,
+#jobForm textarea,
+#jobForm button {
+  padding: 10px;
+  border: 1px solid rgba(255, 192, 203, 0.3);
+  border-radius: 5px;
+}
+
+#jobForm button {
+  background-color: #ff69b4;
+  color: white;
+  cursor: pointer;
+}
+
+#jobForm button:hover {
+  background-color: #ff1493;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .glass-effect {
+    width: 90%;
+    padding: 10px;
+    margin: 80px auto 20px auto;
+  }
+  body {
+    font-size: 0.875rem;
+  }
+}
