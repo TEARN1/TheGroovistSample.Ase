@@ -12,132 +12,168 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
   
-  <!-- PayPal SDK (Replace YOUR_PAYPAL_CLIENT_ID with your actual PayPal client id) -->
+  <!-- PayPal SDK (Replace YOUR_PAYPAL_CLIENT_ID with your actual client id) -->
   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
   
   <!-- Firebase Config -->
   <script src="firebaseConfig.js"></script>
   
-  <!-- Font Awesome for icons -->
+  <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
-    <a href="#events" class="nav-link"><i class="fas fa-calendar-alt"></i> Events</a>
-    <a href="#blog" class="nav-link"><i class="fas fa-blog"></i> Blog</a>
-    <a href="#businesses" class="nav-link"><i class="fas fa-store"></i> Businesses</a>
-    <a href="#profile" class="nav-link"><i class="fas fa-user"></i> Profile</a>
-  </nav>
-
-  <!-- Authentication Section -->
-  <div id="authSection" class="glass-effect">
-    <!-- Sign-Up Form -->
-    <div id="signUpDiv" class="auth-form">
-      <h3><i class="fas fa-user-plus"></i> Sign Up</h3>
-      <form id="signUpForm">
-        <input type="email" id="signUpEmail" placeholder="Email" required />
-        <input type="password" id="signUpPassword" placeholder="Password" required />
-        <button type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
-      </form>
+<body class="dark-mode">
+  <!-- Main Content Container -->
+  <div id="mainContent">
+    <!-- Authentication Section -->
+    <div id="authSection" class="glass-effect">
+      <!-- Sign-Up Form -->
+      <div id="signUpDiv" class="auth-form">
+        <h3><i class="fas fa-user-plus"></i> Sign Up</h3>
+        <form id="signUpForm">
+          <input type="email" id="signUpEmail" aria-label="Sign up Email" placeholder="Email" required />
+          <input type="password" id="signUpPassword" aria-label="Sign up Password" placeholder="Password (min. 6 characters)" required />
+          <button type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+        </form>
+      </div>
+      <!-- Sign-In Form -->
+      <div id="signInDiv" class="auth-form">
+        <h3><i class="fas fa-sign-in-alt"></i> Sign In</h3>
+        <form id="signInForm">
+          <input type="email" id="signInEmail" aria-label="Sign in Email" placeholder="Email" required />
+          <input type="password" id="signInPassword" aria-label="Sign in Password" placeholder="Password" required />
+          <button type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+        </form>
+      </div>
     </div>
-    <!-- Sign-In Form -->
-    <div id="signInDiv" class="auth-form">
-      <h3><i class="fas fa-sign-in-alt"></i> Sign In</h3>
-      <form id="signInForm">
-        <input type="email" id="signInEmail" placeholder="Email" required />
-        <input type="password" id="signInPassword" placeholder="Password" required />
-        <button type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+    <!-- Sign-Out Button -->
+    <button id="signOutButton" style="display: none;"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    
+    <!-- Event Submission Section -->
+    <div id="eventSubmission" class="glass-effect">
+      <h2><i class="fas fa-calendar-plus"></i> Submit Your Event</h2>
+      <form id="eventForm">
+        <!-- Basic Event Details -->
+        <input type="text" id="eventName" placeholder="Event Name" required />
+        <input type="datetime-local" id="eventDateTime" required />
+        <input type="text" id="eventLocation" placeholder="Event Location (e.g., 123 Party St, City)" required />
+        <textarea id="eventDescription" placeholder="Event Description" required></textarea>
+        <select id="eventCategory" required>
+          <option value="" disabled selected>Select Category (e.g., Party, Concert, Festival)</option>
+          <option value="party">Party</option>
+          <option value="concert">Concert</option>
+          <option value="festival">Festival</option>
+        </select>
+        <input type="text" id="ticketInfo" placeholder="Ticket Information (if applicable)" />
+        <input type="text" id="organizerName" placeholder="Organizer Name" required />
+        <input type="email" id="contactInfo" placeholder="Contact Information" required />
+        <!-- File Chooser for Event Image -->
+        <input type="file" id="eventImage" accept="image/*" aria-label="Choose event image" />
+        <input type="url" id="socialMediaLinks" placeholder="Social Media Links (e.g., Facebook event page)" />
+        
+        <!-- New Optional Fields -->
+        <input type="text" id="guestSpeaker" placeholder="Guest Speaker/Line Up (optional)" />
+        <input type="text" id="wordOfTheDay" placeholder="Word of the Day (optional; e.g., 'Inspiration')" />
+        
+        <!-- Promote Event Option -->
+        <div class="promote-section">
+          <input type="checkbox" id="promoteEvent" name="promoteEvent" />
+          <label for="promoteEvent"><i class="fas fa-bullhorn"></i> Promote this event</label>
+        </div>
+        
+        <!-- Promotion Options (hidden by default) -->
+        <div id="promotionOptions" style="display: none;">
+          <h3>Promotion Options</h3>
+          <p>Select the target area for your event promotion:</p>
+          <select id="promotionLevel">
+            <option value="" disabled selected>Select Target Area</option>
+            <option value="neighborhood">Neighborhood/Suburb - R300</option>
+            <option value="city">City/Town - R900</option>
+            <option value="metropolitan">Metropolitan Area - R6,000</option>
+            <option value="province">Province/State - R15,000</option>
+            <option value="country">Country - R60,000</option>
+            <option value="continent">Continent - R150,000</option>
+            <option value="planet">Planet - R600,000</option>
+          </select>
+        </div>
+        <button type="submit"><i class="fas fa-calendar-check"></i> Submit Event</button>
       </form>
+      <!-- PayPal Button Container -->
+      <div id="paypal-button-container" style="display: none;"></div>
+    </div>
+    
+    <!-- Event Listings Section -->
+    <div id="events" class="glass-effect">
+      <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
+      <div id="eventList">
+        <!-- Event cards loaded from Firestore will be displayed here -->
+      </div>
+    </div>
+    
+    <!-- Job Posting Section -->
+    <div id="jobPostings" class="glass-effect">
+      <h2><i class="fas fa-briefcase"></i> Free Job Postings</h2>
+      <form id="jobForm">
+        <input type="text" id="jobTitle" placeholder="Job Title" required />
+        <textarea id="jobDescription" placeholder="Job Description" required></textarea>
+        <input type="text" id="companyName" placeholder="Company Name" required />
+        <input type="email" id="contactEmail" placeholder="Contact Email" required />
+        <button type="submit"><i class="fas fa-briefcase"></i> Post Job</button>
+        <p id="followerNotice" style="display: none; color: red;">
+          <i class="fas fa-exclamation-triangle"></i> You need at least 1,000 followers to post a job.
+        </p>
+      </form>
+      <div id="jobList">
+        <!-- Job postings loaded from Firestore will be displayed here -->
+      </div>
+    </div>
+    
+    <!-- Short Videos Section -->
+    <div id="shortVideos" class="glass-effect">
+      <h2><i class="fas fa-video"></i> Short Videos</h2>
+      <div id="videoFeed">
+        <!-- Video posts with endless scrolling will be loaded here -->
+      </div>
+    </div>
+    
+    <!-- Live Studio Section (on profile) -->
+    <div id="liveStudio" class="glass-effect">
+      <h2><i class="fas fa-broadcast-tower"></i> Live Studio</h2>
+      <p>Your followers will be notified when you go live!</p>
+      <button id="startLiveButton"><i class="fas fa-play-circle"></i> Go Live</button>
+      <div id="livePreview" style="display: none;">
+        <p>Live streaming...</p>
+      </div>
+    </div>
+    
+    <!-- Comments Section -->
+    <div id="commentsSection" class="glass-effect">
+      <h2><i class="fas fa-comments"></i> Comments</h2>
+      <div id="commentsList">
+        <!-- Comments will be loaded here (sorted by popularity with platinum, gold, and silver glass effects) -->
+      </div>
+      <div id="newCommentSection">
+        <textarea id="commentText" placeholder="Share your thoughts..."></textarea>
+        <!-- Buttons for media in comments -->
+        <button id="addVoiceComment"><i class="fas fa-microphone"></i></button>
+        <button id="addImageComment"><i class="fas fa-image"></i></button>
+        <button id="addVideoComment"><i class="fas fa-video"></i></button>
+        <button id="postComment"><i class="fas fa-paper-plane"></i> Post Comment</button>
+      </div>
     </div>
   </div>
   
-  <!-- Sign-Out Button -->
-  <button id="signOutButton" style="display: none;"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-
-  <!-- Event Submission Section -->
-  <div id="eventSubmission" class="glass-effect">
-    <h2><i class="fas fa-calendar-plus"></i> Submit Your Event</h2>
-    <form id="eventForm">
-      <!-- Basic Event Details -->
-      <input type="text" id="eventName" placeholder="Event Name" required />
-      <input type="datetime-local" id="eventDateTime" required />
-      <input type="text" id="eventLocation" placeholder="Event Location" required />
-      <textarea id="eventDescription" placeholder="Event Description" required></textarea>
-      <select id="eventCategory" required>
-        <option value="" disabled selected>Select Category</option>
-        <option value="party">Party</option>
-        <option value="concert">Concert</option>
-        <option value="festival">Festival</option>
-      </select>
-      <input type="text" id="ticketInfo" placeholder="Ticket Information (if applicable)" />
-      <input type="text" id="organizerName" placeholder="Organizer Name" required />
-      <input type="email" id="contactInfo" placeholder="Contact Information" required />
-      <input type="file" id="eventImage" accept="image/*" />
-      <input type="url" id="socialMediaLinks" placeholder="Social Media Links" />
-
-      <!-- New Optional Fields -->
-      <input type="text" id="guestSpeaker" placeholder="Guest speaker or line up (optional)" />
-      <input type="text" id="wordOfTheDay" placeholder="Word of the day (optional)" />
-
-      <!-- Promote Event Option -->
-      <div class="promote-section">
-        <input type="checkbox" id="promoteEvent" name="promoteEvent" />
-        <label for="promoteEvent"><i class="fas fa-bullhorn"></i> Promote this event</label>
-      </div>
-      <!-- Promotion Options (hidden by default) -->
-      <div id="promotionOptions" style="display: none;">
-        <h3>Promotion Options</h3>
-        <p>Select the level of geographic targeting for your event promotion:</p>
-        <select id="promotionLevel">
-          <option value="" disabled selected>Select Target Area</option>
-          <option value="neighborhood">Neighborhood/Suburb - R300</option>
-          <option value="city">City/Town - R900</option>
-          <option value="metropolitan">Metropolitan Area/City - R6,000</option>
-          <option value="province">Province/State - R15,000</option>
-          <option value="country">Country - R60,000</option>
-          <option value="continent">Continent - R150,000</option>
-          <option value="planet">Planet - R600,000</option>
-        </select>
-      </div>
-      <button type="submit"><i class="fas fa-calendar-check"></i> Submit Event</button>
-    </form>
-    <!-- PayPal Button Container (hidden until promotion purchase is needed) -->
-    <div id="paypal-button-container" style="display: none;"></div>
-  </div>
-
-  <!-- Event Listings Section -->
-  <div id="events" class="glass-effect">
-    <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
-    <div id="eventList">
-      <!-- Event cards from Firestore will be loaded here -->
-    </div>
-  </div>
-
-  <!-- Job Posting Section -->
-  <div id="jobPostings" class="glass-effect">
-    <h2><i class="fas fa-briefcase"></i> Free Job Postings</h2>
-    <form id="jobForm">
-      <input type="text" id="jobTitle" placeholder="Job Title" required />
-      <textarea id="jobDescription" placeholder="Job Description" required></textarea>
-      <input type="text" id="companyName" placeholder="Company Name" required />
-      <input type="email" id="contactEmail" placeholder="Contact Email" required />
-      <button type="submit"><i class="fas fa-briefcase"></i> Post Job</button>
-      <p id="followerNotice" style="display: none; color: red;">
-        <i class="fas fa-exclamation-triangle"></i> You need at least 1,000 followers to post a job.
-      </p>
-    </form>
-    <div id="jobList">
-      <!-- Job posts from Firestore will be loaded here -->
-    </div>
-  </div>
-
-  <!-- (Other sections like Blog, Businesses, or Profile can be added here) -->
-
+  <!-- Bottom Navigation Bar (for mobile ease) -->
+  <nav class="bottom-nav">
+    <a href="#home"><i class="fas fa-home"></i></a>
+    <a href="#events"><i class="fas fa-calendar-alt"></i></a>
+    <a href="#shortVideos"><i class="fas fa-video"></i></a>
+    <a href="#liveStudio"><i class="fas fa-broadcast-tower"></i></a>
+    <a href="#profile"><i class="fas fa-user"></i></a>
+  </nav>
+  
   <!-- Custom JavaScript -->
   <script src="script.js"></script>
 </body>
