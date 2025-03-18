@@ -51,14 +51,12 @@ document.getElementById("signUpForm").addEventListener("submit", function(e) {
   const password = document.getElementById("signUpPassword").value;
   signUp(email, password);
 });
-
 document.getElementById("signInForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const email = document.getElementById("signInEmail").value;
   const password = document.getElementById("signInPassword").value;
   signIn(email, password);
 });
-
 document.getElementById("signOutButton").addEventListener("click", function() {
   signOutUser();
 });
@@ -113,7 +111,6 @@ function handleError(error) {
 // Toggle Promotion Options
 const promoteEventCheckbox = document.getElementById("promoteEvent");
 const promotionOptions = document.getElementById("promotionOptions");
-
 promoteEventCheckbox.addEventListener("change", function() {
   if (this.checked) {
     promotionOptions.style.display = "block";
@@ -159,7 +156,7 @@ document.getElementById("eventForm").addEventListener("submit", async function(e
   if (file) {
     eventImageURL = await uploadEventImage(file);
   }
-  // Collect event data including optional fields:
+  // Collect event data including new optional fields:
   const eventData = {
     eventName: document.getElementById("eventName").value,
     eventDateTime: document.getElementById("eventDateTime").value,
@@ -198,13 +195,9 @@ document.getElementById("eventForm").addEventListener("submit", async function(e
 });
 
 // --- PayPal Integration for Promotion Payments ---
-
-// Process Promotion Payment via PayPal and then finalize event submission upon success.
 function processPromotionPayment(eventData) {
   const paypalContainer = document.getElementById("paypal-button-container");
   paypalContainer.style.display = "block";
-
-  // Define promotion amounts in USD (example mapping)
   const promotionAmountsUSD = {
     "neighborhood": 5,
     "city": 15,
@@ -216,18 +209,14 @@ function processPromotionPayment(eventData) {
   };
   const promotionLevel = eventData.promotionLevel;
   const amount = promotionAmountsUSD[promotionLevel] || 0;
-
-  // Render the PayPal button using the PayPal JS SDK.
   paypal.Buttons({
     createOrder: function(data, actions) {
       return actions.order.create({
-        purchase_units: [
-          {
-            amount: {
-              value: amount.toString()
-            }
+        purchase_units: [{
+          amount: {
+            value: amount.toString()
           }
-        ]
+        }]
       });
     },
     onApprove: function(data, actions) {
@@ -244,7 +233,6 @@ function processPromotionPayment(eventData) {
   }).render("#paypal-button-container");
 }
 
-// Finalize event submission after successful payment
 async function finalizeEventSubmission(eventData) {
   try {
     await db.collection("events").add(eventData);
@@ -280,22 +268,22 @@ async function loadEvents() {
       <p><strong>Contact:</strong> ${event.contactInfo}</p>
       ${event.eventImageURL ? `<img src="${event.eventImageURL}" alt="Event Image">` : ""}
       <p><strong>Social Media:</strong> <a href="${event.socialMediaLinks}" target="_blank">${event.socialMediaLinks}</a></p>
-      ${event.guestSpeaker ? `<p><strong>Guest Speaker/Line Up:</strong> ${event.guestSpeaker}</p>` : ""}
+      ${event.guestSpeaker ? `<p><strong>Guest Speaker / Line Up:</strong> ${event.guestSpeaker}</p>` : ""}
       ${event.wordOfTheDay ? `<p><strong>Word of the Day:</strong> ${event.wordOfTheDay}</p>` : ""}
       ${event.promoteEvent ? `<p><strong>Promotion:</strong> ${event.promotionLevel}</p>` : ""}
       <div class="event-actions">
-        <button class="share-button"><i class="fas fa-share"></i> Share</button>
-        <button class="save-button"><i class="fas fa-bookmark"></i> Save</button>
-        <button class="repost-button"><i class="fas fa-retweet"></i> Repost</button>
-        <button class="direction-button" onclick='openDirections("${event.eventLocation}")'><i class="fas fa-map-marker-alt"></i> Directions</button>
-        <button class="accommodation-button" onclick="viewAccommodations('${encodeURIComponent(event.eventLocation)}')"><i class="fas fa-hotel"></i> Accommodations</button>
-        <button class="nearby-button" onclick="showNearbyUsers('${encodeURIComponent(event.eventLocation)}')"><i class="fas fa-users"></i> Nearby Users</button>
+        <button class="share-button"><i class="fas fa-share"></i></button>
+        <button class="save-button"><i class="fas fa-bookmark"></i></button>
+        <button class="repost-button"><i class="fas fa-retweet"></i></button>
+        <button class="direction-button" onclick='openDirections("${event.eventLocation}")'><i class="fas fa-map-marker-alt"></i></button>
+        <button class="accommodation-button" onclick="viewAccommodations('${encodeURIComponent(event.eventLocation)}')"><i class="fas fa-hotel"></i></button>
+        <button class="nearby-button" onclick="showNearbyUsers('${encodeURIComponent(event.eventLocation)}')"><i class="fas fa-users"></i></button>
+        <button class="going-button" onclick="rsvpEvent('${doc.id}')"><i class="fas fa-check"></i> Going (${event.goingCount || 0})</button>
       </div>
     `;
     eventList.appendChild(eventItem);
   });
   
-  // Attach simple alert handlers for non-implemented action buttons
   document.querySelectorAll(".share-button").forEach(button => {
     button.addEventListener("click", () => {
       alert("Share functionality coming soon!");
@@ -314,27 +302,40 @@ async function loadEvents() {
 }
 
 // --- Direction, Accommodations, and Nearby Users Functions ---
-
-// Open Google Maps for Directions based on Event Location
 function openDirections(venueAddress) {
   const url = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(venueAddress);
   window.open(url, "_blank");
 }
 
-// Open a Google Maps search for accommodations near the Event Location
 function viewAccommodations(venueAddressEnc) {
   const url = "https://www.google.com/maps/search/?api=1&query=accommodations+near+" + venueAddressEnc;
   window.open(url, "_blank");
 }
 
-// Stub: Show nearby users (to be implemented based on geolocation or Firestore queries)
 function showNearbyUsers(venueAddressEnc) {
   alert("Feature coming soon: Displaying nearby users near the event venue.");
 }
 
-// --- Job Posting Functions ---
+// --- RSVP/Going Functionality ---
+async function rsvpEvent(eventId) {
+  if (!auth.currentUser) {
+    alert("Please sign in to RSVP.");
+    return;
+  }
+  const eventRef = db.collection("events").doc(eventId);
+  try {
+    await eventRef.update({
+      goingCount: firebase.firestore.FieldValue.increment(1)
+    });
+    alert("Your RSVP has been recorded.");
+    loadEvents();
+  } catch (error) {
+    console.error("Error recording RSVP:", error);
+    alert("Error processing your RSVP. Please try again.");
+  }
+}
 
-// Get Current User's Follower Count
+// --- Job Posting Functions ---
 async function getCurrentUserFollowerCount() {
   if (!auth.currentUser) return 0;
   const userDoc = await db.collection("users").doc(auth.currentUser.uid).get();
@@ -344,12 +345,10 @@ async function getCurrentUserFollowerCount() {
   return 0;
 }
 
-// Check Follower Requirement for Job Posting
 async function checkFollowerRequirement() {
   const followerThreshold = 1000;
   const followerCount = await getCurrentUserFollowerCount();
   const submitButton = document.getElementById("jobForm").querySelector('button[type="submit"]');
-  
   if (followerCount < followerThreshold) {
     document.getElementById("followerNotice").style.display = "block";
     submitButton.disabled = true;
@@ -359,29 +358,23 @@ async function checkFollowerRequirement() {
   }
 }
 
-// Validate Email Function
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email.toLowerCase());
 }
 
-// Handle Job Form Submission
 document.getElementById("jobForm").addEventListener("submit", async function(e) {
   e.preventDefault();
-
   if (!auth.currentUser) {
     alert("You must be logged in to post a job.");
     return;
   }
-  
   const followerThreshold = 1000;
   const followerCount = await getCurrentUserFollowerCount();
-
   if (followerCount < followerThreshold) {
     alert(`You need at least ${followerThreshold} followers to post a job.`);
     return;
   }
-
   const jobData = {
     jobTitle: document.getElementById("jobTitle").value,
     jobDescription: document.getElementById("jobDescription").value,
@@ -390,12 +383,10 @@ document.getElementById("jobForm").addEventListener("submit", async function(e) 
     postedBy: auth.currentUser.uid,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   };
-
   if (!validateEmail(jobData.contactEmail)) {
     alert("Please enter a valid email address.");
     return;
   }
-
   try {
     await db.collection("jobs").add(jobData);
     alert("Job posted successfully!");
@@ -407,13 +398,11 @@ document.getElementById("jobForm").addEventListener("submit", async function(e) 
   }
 });
 
-// Load Jobs from Firestore
 async function loadJobs() {
   const jobsRef = db.collection("jobs").orderBy("timestamp", "desc");
   const snapshot = await jobsRef.get();
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = "";
-
   snapshot.forEach((doc) => {
     const job = doc.data();
     const jobItem = document.createElement("div");
@@ -430,8 +419,7 @@ async function loadJobs() {
   });
 }
 
-// Report Job Function
 function reportJob(jobId) {
   alert(`Reporting job ID: ${jobId}\nOur team will review the posting and take appropriate action.`);
-  // Additional reporting logic can be added as needed.
+  // Further reporting implementation can be added.
 }
