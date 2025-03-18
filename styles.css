@@ -1,4 +1,4 @@
-/* General Styles */
+/* GENERAL STYLES */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -8,177 +8,276 @@ body {
   color: #fff;
 }
 
-.navbar {
+/* THEME: Dark and Light Mode */
+body.dark-mode {
+  background-color: #111;
+  color: #fff;
+}
+body.light-mode {
+  background-color: #fff;
+  color: #000;
+}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav {
   display: flex;
   justify-content: space-around;
   background-color: rgba(0, 0, 0, 0.8);
-  padding: 10px;
   position: fixed;
+  bottom: 0;
   width: 100%;
-  top: 0;
+  padding: 10px 0;
   z-index: 1000;
 }
-
-.nav-link {
+.bottom-nav a {
   color: #fff;
+  font-size: 1.5rem;
   text-decoration: none;
-  padding: 10px 20px;
 }
 
-.nav-link:hover {
-  background-color: #ff69b4;
-  border-radius: 5px;
-}
-
+/* GLASS EFFECT */
 .glass-effect {
   background: rgba(255, 192, 203, 0.1);
   border-radius: 10px;
   padding: 20px;
   margin: 80px auto 20px auto;
-  width: 80%;
+  width: 90%;
   max-width: 800px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 192, 203, 0.3);
 }
 
-/* Authentication Form Styles */
+/* AUTHENTICATION FORM */
 .auth-form {
   background: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
 }
-
 .auth-form h3 {
-  color: #fff;
+  color: inherit;
+  font-size: 1.8rem;
 }
-
 .auth-form input {
   width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 5px;
+  padding: 15px;
+  margin: 8px 0;
   border: none;
+  border-radius: 5px;
+  font-size: 1rem;
 }
-
 .auth-form button {
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   background-color: #ff69b4;
   color: white;
   border: none;
   border-radius: 5px;
+  font-size: 1.1rem;
   cursor: pointer;
 }
-
 .auth-form button:hover {
   background-color: #ff1493;
 }
 
-/* Event Submission Form Styles */
+/* EVENT SUBMISSION FORM */
 #eventForm input,
 #eventForm textarea,
 #eventForm select,
 #eventForm button {
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   margin: 10px 0;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
+  font-size: 1rem;
 }
-
 #eventForm button {
   background-color: #ff69b4;
   color: white;
   cursor: pointer;
 }
-
 #eventForm button:hover {
   background-color: #ff1493;
 }
 
-/* New Optional Fields */
+/* Optional Fields for Event */
 #guestSpeaker,
 #wordOfTheDay {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 192, 203, 0.3);
   border-radius: 5px;
-  padding: 10px;
+  padding: 15px;
   margin: 10px 0;
-  color: #fff;
+  font-size: 1rem;
+  color: inherit;
 }
 
-/* Promote Event Section */
+/* PROMOTION OPTIONS */
 .promote-section {
   margin: 20px 0;
 }
 .promote-section label {
   margin-left: 10px;
+  font-size: 1rem;
 }
 
-/* Event & Job List Items */
+/* EVENT & JOB LIST ITEMS */
 #eventList .event-item,
 #jobList .job-item {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 10px;
 }
+.event-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
 
-/* Event Actions (Share, Save, Repost, Directions, etc.) */
+/* EVENT ACTIONS */
 .event-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
-
 .event-actions button {
   background-color: #ff69b4;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 0.9rem;
   flex: 1 1 auto;
 }
-
 .event-actions button:hover {
   background-color: #ff1493;
 }
 
-/* Job Posting Styles */
+/* JOB POSTING FORM */
 #jobPostings {
   margin-top: 20px;
 }
-
 #jobForm {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
 }
-
 #jobForm input,
 #jobForm textarea,
 #jobForm button {
-  padding: 10px;
+  padding: 15px;
   border: 1px solid rgba(255, 192, 203, 0.3);
   border-radius: 5px;
+  font-size: 1rem;
 }
-
 #jobForm button {
   background-color: #ff69b4;
   color: white;
   cursor: pointer;
 }
-
 #jobForm button:hover {
   background-color: #ff1493;
 }
 
-/* Responsive Design */
+/* SHORT VIDEOS FEED */
+#shortVideos {
+  margin-top: 20px;
+}
+#videoFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.video-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+}
+.video-card video {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* LIVE STUDIO SECTION */
+#liveStudio {
+  margin-top: 20px;
+  text-align: center;
+}
+#startLiveButton {
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+#startLiveButton:hover {
+  background-color: #ff1493;
+}
+#livePreview {
+  margin-top: 20px;
+  background: rgba(255, 192, 203, 0.2);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+/* COMMENTS SECTION */
+#commentsSection {
+  margin-top: 20px;
+}
+#commentsSection textarea {
+  width: 100%;
+  padding: 15px;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 1rem;
+}
+.comment {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+.comment.silver {
+  background: rgba(192, 192, 192, 0.1);
+  border: 1px solid rgba(192, 192, 192, 0.3);
+}
+.comment.gold {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+.comment.platinum {
+  background: rgba(229, 228, 226, 0.1);
+  border: 1px solid rgba(229, 228, 226, 0.5);
+}
+
+/* THEME SWITCHER */
+.theme-switcher {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #ff69b4;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1100;
+}
+.theme-switcher:hover {
+  background: #ff1493;
+}
+
+/* RESPONSIVE DESIGN */
 @media (max-width: 600px) {
   .glass-effect {
     width: 90%;
