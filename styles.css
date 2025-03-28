@@ -188,3 +188,130 @@ ul#eventsList li, ul#jobsList li, ul#commentsList li, ul#notificationsList li, u
     padding: 10px 15px;
   }
 }
+
+/* Auth Section */
+#authSection {
+  padding: 20px;
+}
+
+.auth-form {
+  margin-bottom: 20px;
+  background: rgba(30, 30, 30, 0.8); /* Dark glass effect */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.auth-form input {
+  background-color: #333;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: #5c6bc0;
+  outline: none;
+}
+
+.auth-form button {
+  background-color: #5c6bc0;
+  border: none;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #3949ab;
+}
+
+/* Event Submission, Job Postings, Comments */
+#eventSubmission input, #eventSubmission textarea, #eventSubmission select,
+#jobPostings input, #jobPostings textarea,
+#commentsSection textarea {
+  background-color: #333;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+#eventSubmission input:focus, #eventSubmission textarea:focus, #eventSubmission select:focus,
+#jobPostings input:focus, #jobPostings textarea:focus,
+#commentsSection textarea:focus {
+  border-color: #5c6bc0;
+  outline: none;
+}
+
+#eventSubmission button, #jobPostings button, #commentsSection button {
+  background-color: #5c6bc0;
+  border: none;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#eventSubmission button:hover, #jobPostings button:hover, #commentsSection button:hover {
+  background-color: #3949ab;
+}
+
+/* Section Headers */
+h2 {
+  color: #e0e0e0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  background-color: #1e1e1e;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+.bottom-nav a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 1.5em;
+  transition: color 0.3s ease;
+}
+
+.bottom-nav a:hover {
+  color: #5c6bc0;
+}
+
+/* Loading Indicators */
+#eventListLoading, #jobListLoading, #videoFeedLoading, #commentsListLoading {
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+}
+
+/* Error Messages */
+#signUpError, #signInError, #eventError, #jobError, #commentError, #liveError {
+  color: #ff6666;
+  margin-top: 5px;
+}
