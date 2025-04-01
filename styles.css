@@ -1,4 +1,4 @@
-/* General Styles (Day Theme) */
+/* General Styles (Day Theme) - Responsive */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -359,4 +359,83 @@ ul#adminReportsList li {
   box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* Responsive Adjustments */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.auth-form {
+  padding: 20px;
+  max-width: 90%; /* Adjust for smaller screens */
+}
+
+.section {
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Mobile Styles (up to 600px width) */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px; /* Smaller font for mobile */
+  }
+
+  .auth-form {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  .auth-form input,
+  .auth-form button,
+  .section input,
+  .section textarea,
+  .section button {
+    padding: 10px;
+    font-size: 1em;
+  }
+
+  .bottom-nav {
+    padding: 10px 0;
+  }
+
+  .bottom-nav a {
+    font-size: 1.2em;
+  }
+
+  #eventSubmission,
+  #events,
+  #jobPostings,
+  #shortVideos,
+  #liveStudio,
+  #commentsSection {
+    margin-bottom: 10px;
+  }
+}
+
+/* Tablet Styles (601px to 1024px width) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  body {
+    font-size: 15px;
+  }
+
+  .auth-form {
+    padding: 25px;
+    max-width: 80%;
+  }
+
+  .auth-form input,
+  .auth-form button,
+  .section input,
+  .section textarea,
+  .section button {
+    padding: 11px;
+    font-size: 1.1em;
+  }
+
+  .bottom-nav a {
+    font-size: 1.4em;
+  }
 }
