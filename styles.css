@@ -369,7 +369,7 @@ body {
 
 .auth-form {
   padding: 20px;
-  max-width: 90%; /* Adjust for smaller screens */
+  max-width: 90%;
 }
 
 .section {
@@ -380,12 +380,24 @@ body {
 /* Mobile Styles (up to 600px width) */
 @media (max-width: 600px) {
   body {
-    font-size: 14px; /* Smaller font for mobile */
+    font-size: 14px;
   }
 
   .auth-form {
     padding: 15px;
     max-width: 95%;
+    margin: 10px auto;
+  }
+
+  #eventSubmission,
+  #events,
+  #jobPostings,
+  #shortVideos,
+  #liveStudio,
+  #commentsSection {
+    max-width: 95%;
+    margin: 10px auto;
+    padding: 15px;
   }
 
   .auth-form input,
@@ -399,19 +411,12 @@ body {
 
   .bottom-nav {
     padding: 10px 0;
+    max-width: 95%;
+    margin: 10px auto;
   }
 
   .bottom-nav a {
     font-size: 1.2em;
-  }
-
-  #eventSubmission,
-  #events,
-  #jobPostings,
-  #shortVideos,
-  #liveStudio,
-  #commentsSection {
-    margin-bottom: 10px;
   }
 }
 
