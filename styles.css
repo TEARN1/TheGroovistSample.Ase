@@ -1,287 +1,234 @@
-/* General Styles */
+/* General Styles (Day Theme) */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #070716; /* Dark background */
-  color: #D4E4E1; /* Light text */
+  background-color: #f8f8f8;
+  color: #333;
   line-height: 1.6;
 }
 
-.button, button, .input, textarea, select {
-  padding: 12px 18px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(187, 178, 239, 0.15); /* Subtle purple glass */
-  color: #D4E4E1; /* Light text */
-  cursor: pointer;
-  margin: 8px 0;
-  box-sizing: border-box;
-  width: 100%;
-  backdrop-filter: blur(10px); /* Enhanced blur */
-  -webkit-backdrop-filter: blur(10px);
-  transition: background-color 0.3s ease;
-}
-
-.button:hover, button:hover {
-  background: rgba(187, 178, 239, 0.25); /* Slightly darker on hover */
-}
-
-.input[type="file"] {
-  border: none;
-  padding: 0;
-}
-
-.ul {
-  list-style: none;
-  padding: 0;
-}
-
-a {
-  color: #FFC2F1; /* Pink links */
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #D7F337; /* Green hover for links */
-}
-
-/* Comments (Platinum, Gold, Silver) */
-.comment {
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 15px;
-  margin-bottom: 12px;
-  color: #D4E4E1;
-}
-
-.comment.platinum {
-  background: linear-gradient(to bottom, silver, #D4E4E1); /* Platinum gradient */
-}
-
-.comment.gold {
-  background: linear-gradient(to bottom, gold, #D4E4E1); /* Gold gradient */
-}
-
-.comment.silver {
-  background: linear-gradient(to bottom, lightgray, #D4E4E1); /* Silver gradient */
-}
-
-/* Navigation */
-nav {
-  background: rgba(187, 178, 239, 0.15); /* Subtle purple glass */
-  color: #D4E4E1;
-  padding: 15px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(187, 178, 239, 0.3);
-}
-
-nav ul {
+/* Auth Form Styles */
+#signUpContainer {
   display: flex;
-  justify-content: space-around;
-}
-
-nav li {
-  list-style: none;
-}
-
-/* Forms */
-form {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 30px;
-  background: rgba(212, 228, 225, 0.15); /* Light glass */
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Lists */
-ul#eventsList, ul#jobsList, ul#commentsList, ul#notificationsList, ul#adminUsersList, ul#adminReportsList {
-  margin: 20px auto;
-  padding: 0 25px;
-}
-
-ul#eventsList li, ul#jobsList li, ul#commentsList li, ul#notificationsList li, ul#adminUsersList li, ul#adminReportsList li {
-  background: rgba(187, 178, 239, 0.15); /* Subtle purple glass */
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Chat */
-#groupChatMessages {
-  height: 250px;
-  overflow-y: auto;
-  border: 1px solid rgba(187, 178, 239, 0.3);
-  padding: 20px;
-  margin-bottom: 20px;
-  background: rgba(212, 228, 225, 0.15); /* Light glass */
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Image/Video Previews */
-#eventImagePreview img, #jobImagePreview img, #profileImagePreview img {
-  max-width: 250px;
-  max-height: 250px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-#eventVideoPreview video, #jobVideoPreview video {
-  max-width: 250px;
-  max-height: 250px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Pagination */
-#eventsPagination, #jobsPagination {
-  text-align: center;
-  margin-top: 25px;
-}
-
-#eventsPagination button, #jobsPagination button {
-  margin: 0 8px;
-}
-
-/* Admin Panel */
-#adminPanel {
-  display: none;
-  background: rgba(212, 228, 225, 0.15); /* Light glass */
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  max-width: 900px;
-  margin: 30px auto;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Search and Filter */
-#eventSearch, #jobSearch, #eventFilterCategory, #jobFilterCategory, #eventSortBy, #jobSortBy {
-    width: 250px;
-    margin: 10px 5px;
-    background: rgba(187, 178, 239, 0.15); /* Subtle purple glass */
-    color: #D4E4E1;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(187, 178, 239, 0.3);
-    padding: 10px;
-}
-
-/* Responsive Layout */
-@media (max-width: 768px) {
-  form, #adminPanel {
-    padding: 20px;
-  }
-
-  .button, button, .input, textarea, select {
-    padding: 10px 15px;
-  }
-}
-
-/* Auth Section */
-#authSection {
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   padding: 20px;
 }
 
 .auth-form {
   margin-bottom: 20px;
-  background: rgba(30, 30, 30, 0.8); /* Dark glass effect */
+  background: rgba(255, 204, 255, 0.3);
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 400px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.auth-form h3 {
+  color: #555;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+  animation: slideDown 0.4s ease-out;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #777;
+  animation: slideInLeft 0.4s ease-out;
 }
 
 .auth-form input {
-  background-color: #333;
-  border: 1px solid #444;
-  color: #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid #ddd;
+  color: #333;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
   border-radius: 5px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  animation: slideInRight 0.4s ease-out;
 }
 
 .auth-form input:focus {
-  border-color: #5c6bc0;
+  border-color: #ff69b4;
   outline: none;
+  box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
 }
 
 .auth-form button {
-  background-color: #5c6bc0;
+  background: linear-gradient(to bottom, #ff69b4, #ff1493);
   border: none;
   color: white;
   padding: 12px;
   width: 100%;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .auth-form button:hover {
-  background-color: #3949ab;
+  background: linear-gradient(to bottom, #ff1493, #c2185b);
+  box-shadow: 0 2px 5px rgba(255, 105, 180, 0.4);
 }
 
-/* Event Submission, Job Postings, Comments */
-#eventSubmission input, #eventSubmission textarea, #eventSubmission select,
-#jobPostings input, #jobPostings textarea,
+#signUpError,
+#signInError,
+#eventError,
+#jobError,
+#commentError,
+#liveError {
+  color: #d81b60;
+  margin-top: 10px;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Section Animations */
+#eventSubmission,
+#events,
+#jobPostings,
+#shortVideos,
+#liveStudio,
+#commentsSection {
+  animation: fadeIn 0.5s ease-out;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: rgba(255, 204, 255, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#eventSubmission h2,
+#events h2,
+#jobPostings h2,
+#shortVideos h2,
+#liveStudio h2,
+#commentsSection h2 {
+  animation: slideDown 0.4s ease-out;
+  color: #555;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+#eventSubmission label,
+#jobPostings label,
+#commentsSection label {
+  animation: slideInLeft 0.4s ease-out;
+  display: block;
+  margin-bottom: 8px;
+  color: #777;
+}
+
+#eventSubmission input,
+#eventSubmission textarea,
+#eventSubmission select,
+#jobPostings input,
+#jobPostings textarea,
 #commentsSection textarea {
-  background-color: #333;
-  border: 1px solid #444;
-  color: #e0e0e0;
+  animation: slideInRight 0.4s ease-out;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid #ddd;
+  color: #333;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
   border-radius: 5px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-#eventSubmission input:focus, #eventSubmission textarea:focus, #eventSubmission select:focus,
-#jobPostings input:focus, #jobPostings textarea:focus,
-#commentsSection textarea:focus {
-  border-color: #5c6bc0;
-  outline: none;
-}
-
-#eventSubmission button, #jobPostings button, #commentsSection button {
-  background-color: #5c6bc0;
+#eventSubmission button,
+#jobPostings button,
+#commentsSection button,
+#startLiveButton {
+  animation: fadeInUp 0.4s ease-out;
+  background: linear-gradient(to bottom, #ff69b4, #ff1493);
   border: none;
   color: white;
   padding: 12px;
   width: 100%;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-#eventSubmission button:hover, #jobPostings button:hover, #commentsSection button:hover {
-  background-color: #3949ab;
+#eventSubmission button:hover,
+#jobPostings button:hover,
+#commentsSection button:hover,
+#startLiveButton:hover {
+  background: linear-gradient(to bottom, #ff1493, #c2185b);
+  box-shadow: 0 2px 5px rgba(255, 105, 180, 0.4);
 }
 
-/* Section Headers */
-h2 {
-  color: #e0e0e0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 10px;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Bottom Navigation */
 .bottom-nav {
-  background-color: #1e1e1e;
+  background: rgba(255, 204, 255, 0.3);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -289,29 +236,127 @@ h2 {
   display: flex;
   justify-content: space-around;
   padding: 15px 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+  box-shadow: 0 -2px 10px rgba(255, 182, 193, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .bottom-nav a {
-  color: #e0e0e0;
+  color: #555;
   text-decoration: none;
   font-size: 1.5em;
   transition: color 0.3s ease;
 }
 
 .bottom-nav a:hover {
-  color: #5c6bc0;
+  color: #ff69b4;
 }
 
 /* Loading Indicators */
-#eventListLoading, #jobListLoading, #videoFeedLoading, #commentsListLoading {
+#eventListLoading,
+#jobListLoading,
+#videoFeedLoading,
+#commentsListLoading {
   text-align: center;
   padding: 20px;
   color: #aaa;
 }
 
-/* Error Messages */
-#signUpError, #signInError, #eventError, #jobError, #commentError, #liveError {
-  color: #ff6666;
-  margin-top: 5px;
+/* Chat Styles */
+#groupChatMessages {
+  height: 250px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 182, 193, 0.3);
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(255, 204, 255, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Image/Video Previews */
+#eventImagePreview img,
+#jobImagePreview img,
+#profileImagePreview img {
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
+}
+
+#eventVideoPreview video,
+#jobVideoPreview video {
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
+}
+
+/* Pagination */
+#eventsPagination,
+#jobsPagination {
+  text-align: center;
+  margin-top: 25px;
+}
+
+#eventsPagination button,
+#jobsPagination button {
+  margin: 0 8px;
+}
+
+/* Admin Panel */
+#adminPanel {
+  display: none;
+  background: rgba(255, 204, 255, 0.3);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+  max-width: 900px;
+  margin: 30px auto;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Search and Filter */
+#eventSearch,
+#jobSearch,
+#eventFilterCategory,
+#jobFilterCategory,
+#eventSortBy,
+#jobSortBy {
+  width: 250px;
+  margin: 10px 5px;
+  background: rgba(255, 204, 255, 0.3);
+  color: #333;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 182, 193, 0.3);
+  padding: 10px;
+}
+
+/* List Styles */
+ul#eventsList,
+ul#jobsList,
+ul#commentsList,
+ul#notificationsList,
+ul#adminUsersList,
+ul#adminReportsList {
+  margin: 20px auto;
+  padding: 0 25px;
+}
+
+ul#eventsList li,
+ul#jobsList li,
+ul#commentsList li,
+ul#notificationsList li,
+ul#adminUsersList li,
+ul#adminReportsList li {
+  background: rgba(255, 204, 255, 0.3);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
