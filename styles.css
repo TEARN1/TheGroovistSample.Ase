@@ -1,446 +1,1176 @@
-/* General Styles (Day Theme) - Responsive */
+/* style.css - Verified Full Code - Creative Layout, Pink Glass Theme, All Features */
+
+/* --- Variables --- */
+:root {
+    /* New Color Palette */
+    --primary-color: #BBB2EF; /* Light Purple */
+    --secondary-color: #D7F337; /* Lime Green (Used for accents/success) */
+    --accent-color: #FFC2F1; /* Light Pink (Dominant glass/accent) */
+    --background-color: #D4E4E1; /* Light Blue/Grey */
+    --panel-background: #ffffff; /* White panels (Can be adjusted) */
+    --text-color: #070716; /* Black/Dark Grey */
+    --text-light: #f8f8f8; /* Keep light text for contrast */
+    --border-color: #c0d0cc; /* Adjusted light border based on background */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Keep */
+    --danger-color: #e74c3c; /* Keep standard red */
+    --success-color: #D7F337; /* Use Lime Green for success */
+
+    /* Layout Variables (Keep as is) */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --navbar-height: 60px;
+    --border-radius: 8px;
+    --panel-padding: 20px;
+    --gap: 20px;
+}
+
+/* --- Base Styles --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f8f8f8;
-  color: #333;
-  line-height: 1.6;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding-top: var(--navbar-height); /* Prevent content from hiding under fixed navbar */
 }
 
-/* Auth Form Styles */
-#signUpContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.8em;
+    font-weight: 600;
+    color: var(--text-color); /* Ensure headings use the dark text color */
 }
 
-.auth-form {
-  margin-bottom: 20px;
-  background: rgba(255, 204, 255, 0.3);
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  width: 100%;
-  max-width: 400px;
-  animation: fadeIn 0.5s ease-out;
+a {
+    color: var(--primary-color); /* Light Purple for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.auth-form h3 {
-  color: #555;
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-align: center;
-  animation: slideDown 0.4s ease-out;
+a:hover {
+    color: darken(var(--primary-color), 15%); /* Darker purple on hover */
 }
 
-.auth-form label {
-  display: block;
-  margin-bottom: 8px;
-  color: #777;
-  animation: slideInLeft 0.4s ease-out;
+ul {
+    list-style: none;
+    padding-left: 0;
 }
 
-.auth-form input {
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid #ddd;
-  color: #333;
-  padding: 12px;
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 5px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  animation: slideInRight 0.4s ease-out;
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
-.auth-form input:focus {
-  border-color: #ff69b4;
-  outline: none;
-  box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+    width: 100%;
+    background-color: #fff; /* Ensure form fields have a background */
+    color: var(--text-color);
+}
+input::placeholder, textarea::placeholder {
+    color: #999;
 }
 
-.auth-form button {
-  background: linear-gradient(to bottom, #ff69b4, #ff1493);
-  border: none;
-  color: white;
-  padding: 12px;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeInUp 0.4s ease-out;
+textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
-.auth-form button:hover {
-  background: linear-gradient(to bottom, #ff1493, #c2185b);
-  box-shadow: 0 2px 5px rgba(255, 105, 180, 0.4);
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23070716' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); /* Dark arrow */
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+    padding-right: 40px; /* Make space for arrow */
 }
 
-#signUpError,
-#signInError,
-#eventError,
-#jobError,
-#commentError,
-#liveError {
-  color: #d81b60;
-  margin-top: 10px;
-  text-align: center;
-  animation: fadeIn 0.4s ease-out;
+/* --- Buttons --- */
+.button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease, transform 0.1s ease, color 0.3s ease;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block; /* Fit content */
+    width: auto; /* Override default width */
+    margin: 5px; /* Add some spacing */
 }
 
-/* Section Animations */
-#eventSubmission,
-#events,
-#jobPostings,
-#shortVideos,
-#liveStudio,
-#commentsSection {
-  animation: fadeIn 0.5s ease-out;
-  margin-bottom: 20px;
-  padding: 20px;
-  background: rgba(255, 204, 255, 0.3);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.button:active {
+    transform: scale(0.98);
 }
 
-#eventSubmission h2,
-#events h2,
-#jobPostings h2,
-#shortVideos h2,
-#liveStudio h2,
-#commentsSection h2 {
-  animation: slideDown 0.4s ease-out;
-  color: #555;
-  margin-bottom: 15px;
-  font-weight: 600;
+.primary-button {
+    background-color: var(--primary-color); /* Light Purple */
+    color: var(--text-light); /* Light text on purple */
+}
+.primary-button:hover {
+    background-color: darken(var(--primary-color), 10%);
 }
 
-#eventSubmission label,
-#jobPostings label,
-#commentsSection label {
-  animation: slideInLeft 0.4s ease-out;
-  display: block;
-  margin-bottom: 8px;
-  color: #777;
+.secondary-button {
+    background-color: var(--panel-background); /* White */
+    color: var(--primary-color); /* Light Purple text */
+    border: 1px solid var(--primary-color); /* Light Purple border */
+}
+.secondary-button:hover {
+    background-color: lighten(var(--primary-color), 30%); /* Very light purple background */
+    color: darken(var(--primary-color), 10%);
 }
 
-#eventSubmission input,
-#eventSubmission textarea,
-#eventSubmission select,
-#jobPostings input,
-#jobPostings textarea,
-#commentsSection textarea {
-  animation: slideInRight 0.4s ease-out;
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid #ddd;
-  color: #333;
-  padding: 12px;
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 5px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.danger-button {
+    background-color: var(--danger-color); /* Red */
+    color: var(--text-light);
+}
+.danger-button:hover {
+    background-color: darken(var(--danger-color), 10%);
 }
 
-#eventSubmission button,
-#jobPostings button,
-#commentsSection button,
-#startLiveButton {
-  animation: fadeInUp 0.4s ease-out;
-  background: linear-gradient(to bottom, #ff69b4, #ff1493);
-  border: none;
-  color: white;
-  padding: 12px;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+.save-button {
+    background-color: var(--success-color); /* Lime Green */
+    color: var(--text-color); /* Dark text on lime */
+}
+.save-button:hover {
+    background-color: darken(var(--success-color), 10%);
 }
 
-#eventSubmission button:hover,
-#jobPostings button:hover,
-#commentsSection button:hover,
-#startLiveButton:hover {
-  background: linear-gradient(to bottom, #ff1493, #c2185b);
-  box-shadow: 0 2px 5px rgba(255, 105, 180, 0.4);
+.edit-button {
+    background: none;
+    border: none;
+    color: var(--primary-color); /* Light Purple */
+    padding: 0 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    width: auto;
+}
+.edit-button:hover {
+    color: darken(var(--primary-color), 15%);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
+.action-button {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color); /* Dark Grey */
+    padding: 5px 10px;
+    font-size: 0.9em;
+    margin-right: 5px;
+    margin-bottom: 5px; /* Ensure buttons wrap nicely */
+}
+.action-button:hover {
+    background-color: var(--background-color); /* Light Blue/Grey background */
+}
+.action-button.danger-button { /* Specific style for report button */
+     border-color: var(--danger-color);
+     color: var(--danger-color);
+     background: none;
+}
+.action-button.danger-button:hover {
+    background-color: lighten(var(--danger-color), 35%);
+    color: var(--danger-color);
+}
+/* Active state for RSVP button */
+.post-actions .rsvp-button.active {
+    background-color: var(--success-color);
+    color: var(--text-color);
+    border-color: var(--success-color);
+}
+.post-actions .rsvp-button.active i { color: var(--text-color); }
+/* Active state for Like button */
+.post-actions .like-button.active {
+    color: var(--primary-color); /* Color when liked */
+    border-color: var(--primary-color);
+}
+.post-actions .like-button.active i {
+    font-weight: 900; /* Make FontAwesome solid icon bold */
+}
+
+
+.full-width {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* --- Navbar --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+    /* Gradient using new colors - Purple to Pink */
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    color: var(--text-color); /* Dark text might be more readable on this gradient */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    z-index: 1000;
+}
+
+.navbar-brand a {
+    color: var(--text-color); /* Dark text */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.navbar-brand a:hover {
+    color: var(--text-light); /* Lighten on hover */
+}
+
+.navbar-actions .button {
+    /* Buttons on navbar - subtle style */
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    color: var(--text-color); /* Dark text */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle dark border */
+}
+.navbar-actions .button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: var(--text-light); /* Light text on hover */
+}
+.navbar-actions .button.danger-button {
+    background-color: rgba(231, 76, 60, 0.8); /* Red transparent */
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--text-light); /* Light text on red */
+}
+.navbar-actions .button.danger-button:hover {
+    background-color: var(--danger-color);
+}
+
+/* --- Main Layout Grid --- */
+.creative-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px; /* Left fixed, Center flexible, Right fixed */
+    grid-template-areas: "happenings feed profile";
+    gap: var(--gap);
+    padding: var(--gap);
+    max-width: 1600px; /* Optional: Limit max width */
+    margin: 0 auto; /* Center the layout */
+}
+
+.panel {
+    /* Base panel style - can be overridden by glass effect */
+    background-color: var(--panel-background);
+    border-radius: var(--border-radius);
+    padding: var(--panel-padding);
+    box-shadow: 0 1px 3px var(--shadow-color);
+    overflow-y: auto; /* Allow panels to scroll if content overflows */
+    max-height: calc(100vh - var(--navbar-height) - (2 * var(--gap))); /* Limit height */
+    border: 1px solid var(--border-color); /* Add subtle border */
+}
+
+/* --- Utilities --- */
+.glass-effect { /* Apply to modals or specific cards */
+    /* Dominant Pink Glass Effect */
+    background: rgba(255, 194, 241, 0.75); /* Light Pink with 75% opacity */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for glass */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for glass */
+    border-radius: var(--border-radius); /* Ensure radius is applied */
+    color: var(--text-color); /* Ensure text inside is readable */
+}
+.glass-effect h2, .glass-effect h3 {
+    color: var(--text-color); /* Dark text on pink glass */
+}
+
+/* Apply Pink Glass Effect Dominantly */
+.happenings-panel,
+.profile-panel,
+.auth-container,
+.modal-content {
+    /* Apply glass effect directly to these containers */
+    background: rgba(255, 194, 241, 0.75); /* Light Pink with 75% opacity */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for glass */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for glass */
+    border-radius: var(--border-radius); /* Ensure radius is applied */
+    color: var(--text-color); /* Ensure text inside is readable */
+    padding: var(--panel-padding); /* Ensure padding is consistent */
+}
+/* Override base panel background for these */
+.happenings-panel,
+.profile-panel {
+     background-color: transparent; /* Let the glass effect background show */
+}
+
+
+.happenings-panel {
+    grid-area: happenings;
+}
+
+.feed-area {
+    grid-area: feed;
+    background-color: transparent; /* Make feed area background transparent */
+    border: none; /* Remove default panel border */
+    box-shadow: none; /* Remove default panel shadow */
+    padding: 0; /* Remove default panel padding */
+    max-height: none; /* Remove max-height */
+    overflow-y: visible; /* Remove scroll */
+}
+
+.profile-panel {
+    grid-area: profile;
+}
+
+/* --- Panel Specific Styles --- */
+
+/* Happenings Panel (Now with Glass) */
+.happenings-controls {
+    margin-bottom: var(--gap);
+}
+.happenings-controls input,
+.happenings-controls select {
+    margin-bottom: 10px;
+    background-color: rgba(255,255,255,0.8); /* Slightly transparent white inputs */
+    border-color: rgba(0,0,0,0.1);
+}
+.happenings-section {
+    margin-bottom: var(--gap);
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Subtle dark separator */
+    padding-top: var(--gap);
+}
+.happenings-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+.event-list li, .live-list .live-item, .video-list .video-item {
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1); /* Subtle dark separator */
+    font-size: 0.95em;
+}
+.event-list li:last-child, .live-list .live-item:last-child, .video-list .video-item:last-child {
+    border-bottom: none;
+}
+.live-list .live-item i, .video-list .video-item i {
+    margin-right: 8px;
+    color: var(--primary-color); /* Light Purple icons */
+}
+.live-badge {
+    background-color: red;
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+.live-indicator { color: red; } /* Make live icon red */
+
+
+/* Feed Area & Cards */
+.post-card {
+    position: relative; /* For absolute positioning inside if needed */
+    /* Keep post cards distinct, maybe white or slightly off-white */
+    background-color: var(--panel-background); /* White */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--panel-padding);
+    margin-bottom: var(--gap);
+    box-shadow: 0 1px 2px var(--shadow-color);
+    /* Optionally add the glass effect here too if desired */
+    /* &.glass-effect { ... } */
+}
+.promoted { /* Style for promoted event cards */
+    border-left: 4px solid var(--secondary-color); /* Lime green border */
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.card-header > div { /* Container for author and timestamp */
+    flex-grow: 1;
+}
+
+.card-author {
+    font-weight: 600; /* Explicitly ensure author name is bold */
+    display: block;
+    line-height: 1.2;
+}
+
+.card-timestamp {
+    font-size: 0.8em;
+    color: #666;
+    display: block;
+    line-height: 1.2;
+}
+
+.card-category {
+    font-size: 0.8em;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.job-card .card-category { background-color: #3498db; } /* Example different color for jobs */
+.video-card .card-category { background-color: #e74c3c; } /* Example different color for videos */
+
+.card-body .card-title {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.card-details {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+.card-details i {
+    margin-right: 8px;
+    width: 16px; /* Ensure icons align */
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.card-description {
+    margin: 10px 0;
+    font-size: 0.95em;
+}
+
+.card-image-placeholder, .card-video-placeholder {
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+}
+
+.card-footer {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.card-stats {
+    display: flex;
+    flex-wrap: wrap; /* Allow stats to wrap */
+    gap: 15px;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+.card-stats .reaction-stat {
+    display: inline-flex; /* Align icon and count */
+    align-items: center;
+    gap: 5px; /* Space between icon and count */
+    color: #555; /* Slightly darker than default text */
+}
+.card-stats .reaction-stat i {
+    color: var(--primary-color); /* Use primary color for reaction icons */
+}
+
+/* Video Card Specific */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: #000;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin: 10px 0;
+    cursor: pointer; /* Indicate interactivity */
+}
+
+.card-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area, might crop */
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0; /* Hidden by default when playing */
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* Allow clicks/dblclicks to pass through to video */
+}
+/* Show overlay initially or when paused */
+.card-video:paused + .video-overlay {
     opacity: 1;
-  }
+    pointer-events: auto; /* Allow clicking overlay to play/pause */
 }
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Comment Section */
+.comment-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
 }
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Bottom Navigation */
-.bottom-nav {
-  background: rgba(255, 204, 255, 0.3);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  padding: 15px 0;
-  box-shadow: 0 -2px 10px rgba(255, 182, 193, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.bottom-nav a {
-  color: #555;
-  text-decoration: none;
-  font-size: 1.5em;
-  transition: color 0.3s ease;
-}
-
-.bottom-nav a:hover {
-  color: #ff69b4;
-}
-
-/* Loading Indicators */
-#eventListLoading,
-#jobListLoading,
-#videoFeedLoading,
-#commentsListLoading {
-  text-align: center;
-  padding: 20px;
-  color: #aaa;
-}
-
-/* Chat Styles */
-#groupChatMessages {
-  height: 250px;
-  overflow-y: auto;
-  border: 1px solid rgba(255, 182, 193, 0.3);
-  padding: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 204, 255, 0.3);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Image/Video Previews */
-#eventImagePreview img,
-#jobImagePreview img,
-#profileImagePreview img {
-  max-width: 250px;
-  max-height: 250px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
-}
-
-#eventVideoPreview video,
-#jobVideoPreview video {
-  max-width: 250px;
-  max-height: 250px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
-}
-
-/* Pagination */
-#eventsPagination,
-#jobsPagination {
-  text-align: center;
-  margin-top: 25px;
-}
-
-#eventsPagination button,
-#jobsPagination button {
-  margin: 0 8px;
-}
-
-/* Admin Panel */
-#adminPanel {
-  display: none;
-  background: rgba(255, 204, 255, 0.3);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
-  max-width: 900px;
-  margin: 30px auto;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Search and Filter */
-#eventSearch,
-#jobSearch,
-#eventFilterCategory,
-#jobFilterCategory,
-#eventSortBy,
-#jobSortBy {
-  width: 250px;
-  margin: 10px 5px;
-  background: rgba(255, 204, 255, 0.3);
-  color: #333;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 182, 193, 0.3);
-  padding: 10px;
-}
-
-/* List Styles */
-ul#eventsList,
-ul#jobsList,
-ul#commentsList,
-ul#notificationsList,
-ul#adminUsersList,
-ul#adminReportsList {
-  margin: 20px auto;
-  padding: 0 25px;
-}
-
-ul#eventsList li,
-ul#jobsList li,
-ul#commentsList li,
-ul#notificationsList li,
-ul#adminUsersList li,
-ul#adminReportsList li {
-  background: rgba(255, 204, 255, 0.3);
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Responsive Adjustments */
-body {
-  padding: 0;
-  margin: 0;
-}
-
-.auth-form {
-  padding: 20px;
-  max-width: 90%;
-}
-
-.section {
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-/* Mobile Styles (up to 600px width) */
-@media (max-width: 600px) {
-  body {
-    font-size: 14px;
-  }
-
-  .auth-form {
-    padding: 15px;
-    max-width: 95%;
-    margin: 10px auto;
-  }
-
-  #eventSubmission,
-  #events,
-  #jobPostings,
-  #shortVideos,
-  #liveStudio,
-  #commentsSection {
-    max-width: 95%;
-    margin: 10px auto;
-    padding: 15px;
-  }
-
-  .auth-form input,
-  .auth-form button,
-  .section input,
-  .section textarea,
-  .section button {
-    padding: 10px;
+.comment-section h4 {
     font-size: 1em;
-  }
-
-  .bottom-nav {
-    padding: 10px 0;
-    max-width: 95%;
-    margin: 10px auto;
-  }
-
-  .bottom-nav a {
+    margin-bottom: 10px;
+    color: #555;
+}
+.comment-list {
+    max-height: 150px; /* Limit height */
+    overflow-y: auto;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+.comment {
+    padding: 5px 0;
+    border-bottom: 1px dotted #eee;
+}
+.comment:last-child {
+    border-bottom: none;
+}
+.comment-author {
+    font-weight: 600;
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+.add-comment-form {
+    display: flex;
+    gap: 5px;
+    align-items: center; /* Align buttons vertically */
+}
+.add-comment-form input[type="text"] {
+    flex-grow: 1;
+    margin-bottom: 0; /* Remove default margin */
+    height: 36px; /* Match button height */
+    margin-right: 5px; /* Adjust spacing */
+}
+.add-comment-form button {
+    padding: 0 12px;
+    width: auto;
+    height: 36px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    margin-left: 0; /* Reset margin */
+}
+.add-comment-form button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.add-comment-form button:hover:not(:disabled) {
+     background-color: darken(var(--primary-color), 10%);
+}
+.comment-input-btn {
+    background: none;
+    border: none;
+    color: #555; /* Dark grey for icons */
     font-size: 1.2em;
-  }
+    padding: 0 8px;
+    cursor: pointer;
+    width: auto;
+    margin: 0; /* Reset margin */
+    height: 36px; /* Match input height */
+}
+.comment-input-btn:hover {
+    color: var(--primary-color);
 }
 
-/* Tablet Styles (601px to 1024px width) */
-@media (min-width: 601px) and (max-width: 1024px) {
-  body {
-    font-size: 15px;
-  }
 
-  .auth-form {
-    padding: 25px;
-    max-width: 80%;
-  }
-
-  .auth-form input,
-  .auth-form button,
-  .section input,
-  .section textarea,
-  .section button {
-    padding: 11px;
-    font-size: 1.1em;
-  }
-
-  .bottom-nav a {
+/* Profile Panel (Now with Glass) */
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--gap);
+    padding-bottom: var(--gap);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle dark separator */
+}
+.profile-image-container {
+    position: relative;
+    margin-right: 20px;
+}
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.5); /* Semi-transparent white border */
+    box-shadow: 0 0 5px var(--shadow-color);
+}
+.edit-profile-pic-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--primary-color); /* Light Purple */
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.8em;
+    padding: 0; /* Reset padding */
+}
+.profile-info h2 {
+    margin-bottom: 5px;
     font-size: 1.4em;
-  }
+    color: var(--text-color); /* Ensure dark text */
+}
+.profile-info p {
+    font-size: 0.9em;
+    color: #333; /* Slightly lighter dark text */
+}
+.profile-info p i { /* Style icon in location */
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+.profile-section {
+    margin-bottom: var(--gap);
+}
+.profile-section h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color); /* Ensure dark text */
+}
+.profile-section ul li, .profile-section .recommendation-item, .profile-section .loading-indicator {
+    padding: 5px 0;
+    font-size: 0.95em;
+}
+.profile-section ul li i, .profile-section .recommendation-item i {
+     margin-right: 8px;
+     color: var(--primary-color); /* Light Purple icons */
+}
+#editInterestsArea textarea, #editGoalsArea textarea,
+#editFavArtistsArea textarea, #editFavGenresArea textarea, #editFavVenuesArea textarea {
+    margin-bottom: 10px;
+    background-color: rgba(255,255,255,0.8); /* Slightly transparent white inputs */
+    border-color: rgba(0,0,0,0.1);
+}
+
+/* --- Modals (Now with Glass by default) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 7, 22, 0.7); /* Dark overlay using --text-color base */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Above navbar */
+    padding: 20px;
+}
+
+/* .auth-container, .modal-content already styled with glass effect above */
+.auth-container, .modal-content {
+    max-width: 550px; /* Slightly wider default for modals */
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--text-color); /* Dark close button */
+    cursor: pointer;
+    padding: 0; /* Reset padding */
+    width: auto; /* Reset width */
+    opacity: 0.7;
+}
+.close-btn:hover {
+    opacity: 1;
+}
+
+/* Auth Modal Specific */
+.auth-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle dark separator */
+}
+.auth-tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: rgba(7, 7, 22, 0.6); /* Dark grey inactive tab */
+    margin-bottom: -1px; /* Overlap border */
+    transition: color 0.3s, border-color 0.3s;
+}
+.auth-tab-btn.active {
+    border-bottom-color: var(--primary-color); /* Light Purple active indicator */
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.auth-content {
+    display: none; /* Hidden by default */
+}
+.auth-content.active {
+    display: block;
+}
+.auth-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color); /* Light Purple heading */
+}
+.guest-browse-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+/* Add Event Modal Specific */
+.modal-content h2 {
+     text-align: center;
+     color: var(--primary-color); /* Light Purple heading */
+     margin-bottom: 20px;
+}
+.media-preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px dashed rgba(0, 0, 0, 0.2); /* Subtle dark dashed border */
+    border-radius: var(--border-radius);
+    min-height: 50px;
+    background-color: rgba(255,255,255,0.3); /* Very subtle white background */
+}
+.media-preview-area img, .media-preview-area video {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.media-preview-area p {
+    font-size: 0.8em;
+    color: #333; /* Darker text for file names */
+}
+.promotion-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+.promotion-section label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.promotion-section input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+.requirement-note { /* For Job Modal */
+    font-size: 0.85em;
+    color: #666;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
+/* Add Event Modal Minimization Styles */
+.form-row {
+    display: flex;
+    gap: 10px; /* Space between items in the row */
+    margin-bottom: 8px; /* Use reduced margin */
+}
+.form-row input,
+.form-row select {
+    flex: 1; /* Each item takes equal space */
+    margin-bottom: 0; /* Remove bottom margin as row handles it */
+}
+.map-placeholder-small {
+    height: 80px; /* Reduced height */
+    background-color: #eee;
+    margin-bottom: 8px; /* Use reduced margin */
+    text-align: center;
+    line-height: 80px; /* Center text vertically */
+    color: #999;
+    border-radius: var(--border-radius);
+    font-size: 0.9em;
+}
+#toggleAdvancedOptionsBtn i {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+#toggleAdvancedOptionsBtn.open i {
+    transform: rotate(180deg);
+}
+#addEventForm label {
+    display: block; /* Make label take full width */
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+#addEventForm input[type="file"] {
+    padding: 5px;
+}
+/* Reduce bottom margin slightly on most form elements */
+#addEventForm input,
+#addEventForm select,
+#addEventForm textarea,
+#addEventForm label,
+#addEventForm .media-preview-area {
+    margin-bottom: 8px; /* Slightly reduced margin */
+}
+
+
+/* --- Chat UI --- */
+.chat-toggle-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    padding: 10px 15px;
+    border-radius: 25px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    color: var(--text-color);
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-size: 1em;
+    transition: transform 0.2s ease;
+    display: none; /* Hidden by default, shown by JS */
+}
+.chat-toggle-button:hover {
+    transform: scale(1.05);
+}
+.chat-toggle-button.active {
+    /* Optional: style when chat is open */
+}
+
+.chat-container {
+    position: fixed;
+    bottom: 80px; /* Above toggle button */
+    right: 20px;
+    width: 450px; /* Adjust width */
+    max-width: 90vw;
+    height: 500px; /* Adjust height */
+    max-height: 70vh;
+    z-index: 1040;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(10px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    /* Apply glass effect */
+    background: rgba(255, 194, 241, 0.85); /* Slightly more opaque glass for chat */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+.chat-container.visible {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px var(--panel-padding);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.chat-header h3 {
+    margin-bottom: 0;
+}
+.chat-header .close-btn {
+    position: static; /* Override absolute positioning */
+    font-size: 1.5em;
+}
+
+.chat-body {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.chat-sidebar {
+    width: 150px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    padding: 10px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+.chat-sidebar h4 {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    color: #555;
+}
+#chatContactList li {
+    padding: 8px 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+#chatContactList li:hover {
+    background-color: rgba(255,255,255,0.3);
+}
+#chatContactList li i { color: var(--primary-color); }
+.unread-indicator {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: var(--secondary-color); /* Lime green */
+    border-radius: 50%;
+}
+
+
+.chat-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Important */
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto; /* Enable scrolling for messages */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.message {
+    padding: 8px 12px;
+    border-radius: 15px;
+    max-width: 75%;
+    word-wrap: break-word;
+}
+.message.sent {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-bottom-right-radius: 5px;
+    align-self: flex-end;
+}
+.message.received {
+    background-color: #e5e5ea;
+    color: var(--text-color);
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+}
+
+.chat-input-form {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    background-color: rgba(255,255,255,0.3); /* Subtle background */
+}
+#chatMessageInput {
+    flex-grow: 1;
+    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0;
+    height: 38px;
+}
+.chat-input-form button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.3em;
+    padding: 0 10px;
+    cursor: pointer;
+    width: auto;
+    margin-left: 5px;
+}
+.chat-input-form button:hover {
+    color: darken(var(--primary-color), 15%);
+}
+.chat-media-btn {
+    font-size: 1.1em; /* Slightly smaller */
+    color: #555;
+}
+
+.chat-reminder {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    display: none; /* Hidden by default */
+    z-index: 1;
+}
+
+/* --- General Utilities --- */
+.empty-state {
+    color: #555; /* Darker empty state text */
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+.loading-indicator {
+     color: #555; /* Darker loading text */
+     font-style: italic;
+     padding: 10px 0;
+}
+
+
+/* --- Responsiveness (Keep existing rules, colors will adapt) --- */
+@media (max-width: 1024px) {
+    .creative-layout {
+        grid-template-columns: 240px 1fr 280px; /* Adjust column sizes */
+    }
+    .panel, .happenings-panel, .profile-panel { /* Ensure padding applies to glass panels too */
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .creative-layout {
+        grid-template-columns: 1fr; /* Stack columns */
+        grid-template-areas:
+            "profile"    /* Profile often useful at top on mobile */
+            "happenings"
+            "feed";
+        padding: 10px;
+        gap: 15px;
+    }
+    .panel, .happenings-panel, .profile-panel {
+        max-height: none; /* Allow panels to grow */
+        overflow-y: visible;
+        padding: 15px; /* Consistent padding */
+    }
+    .feed-area {
+         padding: 0; /* Reset padding for feed area container */
+    }
+    .post-card {
+        margin-left: 0; /* Ensure post cards align */
+        margin-right: 0;
+    }
+    .navbar {
+        padding: 0 10px;
+    }
+    .navbar-brand a {
+        font-size: 1.3em;
+    }
+    .navbar-actions .button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    .auth-container, .modal-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+    .chat-container {
+        width: 90vw;
+        height: 70vh;
+        bottom: 70px;
+        right: 5vw;
+    }
+    .chat-sidebar {
+        width: 120px; /* Smaller sidebar on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+     body {
+        padding-top: 50px; /* Adjust for smaller navbar */
+        font-size: 15px; /* Slightly smaller base font */
+     }
+    .navbar {
+        height: 50px;
+    }
+     .navbar-brand a {
+        font-size: 1.1em;
+    }
+    .navbar-actions .button {
+        padding: 6px 8px;
+        font-size: 0.8em;
+        margin: 2px;
+    }
+    input, select, textarea, button {
+        font-size: 0.95rem;
+        padding: 8px 12px;
+    }
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-image-container {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    .form-row {
+        flex-direction: column; /* Stack form row items */
+        gap: 0; /* Remove gap when stacked */
+        margin-bottom: 0; /* Remove row margin */
+    }
+    .form-row input, .form-row select {
+        margin-bottom: 8px; /* Add back margin to individual items */
+    }
+    .chat-container {
+        bottom: 65px; /* Adjust for smaller toggle button */
+    }
+    .chat-toggle-button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    .chat-sidebar {
+        display: none; /* Optionally hide sidebar completely on very small screens */
+    }
 }
