@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Gruvist</title>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gruvist - Full Structure</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Link to your final CSS file -->
+     
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -16,146 +19,408 @@
   <script src="firebaseConfig.js"></script>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  
-  <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="style.css">
+    <!-- Placeholder for Map Library CSS if needed -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
 </head>
-<body class="dark-mode">
-  <div id="mainContent">
-    <div id="authSection" class="glass-effect">
-      <div id="signUpDiv" class="auth-form">
-        <h3><i class="fas fa-user-plus"></i> Sign Up</h3>
-        <form id="signUpForm">
-          <input type="email" id="signUpEmail" aria-label="Sign up Email" placeholder="Email" required />
-          <input type="password" id="signUpPassword" aria-label="Sign up Password" placeholder="Password (min. 6 characters)" required minlength="6"/>
-          <button type="submit" aria-label="Sign up"><i class="fas fa-user-plus"></i> Sign Up</button>
-          <p id="signUpError" style="color: red; display: none;"></p>
-        </form>
-      </div>
-      <div id="signInDiv" class="auth-form">
-        <h3><i class="fas fa-sign-in-alt"></i> Sign In</h3>
-        <form id="signInForm">
-          <input type="email" id="signInEmail" aria-label="Sign in Email" placeholder="Email" required />
-          <input type="password" id="signInPassword" aria-label="Sign in Password" placeholder="Password" required />
-          <button type="submit" aria-label="Sign in"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-          <p id="signInError" style="color: red; display: none;"></p>
-        </form>
-      </div>
-    </div>
-    <button id="signOutButton" style="display: none;" aria-label="Sign out"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-    
-    <div id="eventSubmission" class="glass-effect">
-      <h2><i class="fas fa-calendar-plus"></i> Submit Your Event</h2>
-      <form id="eventForm">
-        <input type="text" id="eventName" placeholder="Event Name" required />
-        <input type="datetime-local" id="eventDateTime" required />
-        <input type="text" id="eventLocation" placeholder="Event Location (e.g., 123 Party St, City)" required />
-        <textarea id="eventDescription" placeholder="Event Description" required></textarea>
-        <select id="eventCategory" required>
-          <option value="" disabled selected>Select Category (e.g., Party, Concert, Festival)</option>
-          <option value="party">Party</option>
-          <option value="concert">Concert</option>
-          <option value="festival">Festival</option>
-        </select>
-        <input type="text" id="ticketInfo" placeholder="Ticket Information (if applicable)" />
-        <input type="text" id="organizerName" placeholder="Organizer Name" required />
-        <input type="email" id="contactInfo" placeholder="Contact Information" required />
-        <input type="file" id="eventImage" accept="image/*" aria-label="Choose event image" />
-        <input type="url" id="socialMediaLinks" placeholder="Social Media Links (e.g., Facebook event page)" />
-        
-        <input type="text" id="guestSpeaker" placeholder="Guest Speaker/Line Up (optional)" />
-        <input type="text" id="wordOfTheDay" placeholder="Word of the Day (optional; e.g., 'Inspiration')" />
-        
-        <div class="promote-section">
-          <input type="checkbox" id="promoteEvent" name="promoteEvent" />
-          <label for="promoteEvent"><i class="fas fa-bullhorn"></i> Promote this event</label>
+<body>
+
+    <!-- ======================= -->
+    <!--        MODALS           -->
+    <!-- ======================= -->
+
+    <!-- Login/Register Modal -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="auth-container glass-effect">
+            <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
+            <div class="auth-tabs">
+                <button id="loginTabBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                <button id="registerTabBtn" class="auth-tab-btn" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            <!-- Login Form -->
+            <div id="loginTab" class="auth-content active">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit" class="button primary-button">Login</button>
+                    <p class="guest-browse-link">Or <a href="#" onclick="browseAsGuest(); return false;">Browse as Guest</a></p>
+                </form>
+            </div>
+            <!-- Registration Form -->
+            <div id="registerTab" class="auth-content">
+                <h2>Register</h2>
+                <form id="registerForm">
+                    <input type="text" id="regFullName" placeholder="Full Name" required>
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <input type="password" id="regPassword" placeholder="Password" required>
+                    <select id="regLocation" required>
+                         <option value="" disabled selected>Select Location</option>
+                         <option value="Midrand">Midrand</option>
+                         <option value="Gauteng">Gauteng (Other)</option>
+                         <option value="Other">Other</option>
+                    </select>
+                    <button type="submit" class="button primary-button">Register</button>
+                </form>
+            </div>
         </div>
-        
-        <div id="promotionOptions" style="display: none;">
-          <h3>Promotion Options</h3>
-          <p>Select the target area for your event promotion:</p>
-          <select id="promotionLevel">
-            <option value="" disabled selected>Select Target Area</option>
-            <option value="neighborhood">Neighborhood/Suburb - R300</option>
-            <option value="city">City/Town - R900</option>
-            <option value="metropolitan">Metropolitan Area - R6,000</option>
-            <option value="province">Province/State - R15,000</option>
-            <option value="country">Country - R60,000</option>
-            <option value="continent">Continent - R150,000</option>
-            <option value="planet">Planet - R600,000</option>
-          </select>
+    </div>
+
+    <!-- Add Event Modal (Minimized Structure) -->
+    <div id="addEventModal" class="modal-overlay">
+        <div class="modal-content glass-effect">
+             <button class="close-btn" onclick="closeModal('addEventModal')">&times;</button>
+             <h2>Host New Event</h2>
+             <form id="addEventForm">
+                 <!-- Required Fields -->
+                 <input type="text" id="eventTitle" placeholder="Event Title *" required>
+                 <div class="form-row"> 
+                    <!-- Row for Date/Time and Category -->
+                    <input type="datetime-local" id="eventDateTime" required title="Event Date and Time *">
+                    <select id="eventCategory" required>
+                         <option value="" disabled selected>Category *</option>
+                         <option value="concert">Concert</option>
+                         <option value="workshop">Workshop</option>
+                         <option value="meetup">Meetup</option>
+                         <option value="livestream">Livestream</option>
+                         <option value="art">Art & Culture</option>
+                         <option value="food">Food & Drink</option>
+                         <option value="comedy">Comedy</option>
+                         <option value="other">Other</option>
+                     </select>
+                 </div>
+                 <input type="text" id="eventLocation" placeholder="Venue Name / Address *" required>
+                 <!-- Map Placeholder - Reduced Height -->
+                 <div id="eventMapPlaceholder" class="map-placeholder-small">Map Preview Area</div>
+
+                 <!-- Media Upload -->
+                 <label for="eventMedia">Upload Media (Images/Video - Max 5):</label>
+                 <input type="file" id="eventMedia" accept="image/*,video/*" multiple>
+                 <div id="mediaPreview" class="media-preview-area"></div>
+
+                 <!-- Toggle Button for Advanced Options -->
+                 <button type="button" id="toggleAdvancedOptionsBtn" class="button secondary-button full-width" style="margin-bottom: 15px;">Show Advanced Options <i class="fas fa-chevron-down"></i></button>
+
+                 <!-- --- Advanced/Optional Fields (Initially Hidden) -->
+                 <div id="advancedEventOptions" style="display: none;">
+                     <textarea id="eventDescription" placeholder="Description (Optional)" rows="3"></textarea> 
+                     <!-- Limit initial rows -->
+                     <div class="form-row"> 
+                        <!-- Row for Organizer/Contact -->
+                        <input type="text" id="eventOrganizer" placeholder="Organizer Name (Optional)">
+                        <input type="email" id="eventContact" placeholder="Contact Email (Optional)">
+                     </div>
+                     <div class="form-row"> 
+                        <!-- Row for Tickets/Social -->
+                        <input type="text" id="eventTickets" placeholder="Ticket Info / URL (Optional)">
+                        <input type="url" id="eventSocialLink" placeholder="Social Media Link (Optional)">
+                     </div>
+                     <div class="form-row"> 
+                        <!-- Row for Guests/Word -->
+                        <input type="text" id="eventGuests" placeholder="Guest Speaker / Line Up (Optional)">
+                        <input type="text" id="eventWordOfDay" placeholder="Word of the Day (Optional)">
+                     </div>
+
+                     <!-- Event Promotion Placeholder -->
+                     <div class="promotion-section">
+                         <label>
+                             <input type="checkbox" id="promoteEventCheckbox"> Promote this event? (Simulated Fee)
+                         </label>
+                         <div id="paypalPlaceholder" style="display: none; margin-top: 10px; padding: 10px; background-color: #fff; border: 1px dashed var(--primary-color); border-radius: var(--border-radius); text-align: center;">
+                             PayPal Integration Placeholder
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Publish Button -->
+                 <button type="button" id="publishEventButton" class="button primary-button">Publish Event</button>
+             </form>
         </div>
-        <button type="submit" aria-label="Submit event"><i class="fas fa-calendar-check"></i> Submit Event</button>
-        <p id="eventError" style="color: red; display: none;"></p>
-      </form>
-      <div id="paypal-button-container" style="display: none;"></div>
     </div>
-    
-    <div id="events" class="glass-effect">
-      <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
-      <div id="eventList">
-        <div id="eventListLoading" style="display: none;">Loading...</div>
-      </div>
+
+    <!-- Add Job Modal -->
+    <div id="addJobModal" class="modal-overlay">
+        <div class="modal-content glass-effect">
+             <button class="close-btn" onclick="closeModal('addJobModal')">&times;</button>
+             <h2>Post New Job</h2>
+             <form id="addJobForm">
+                 <input type="text" id="jobTitle" placeholder="Job Title *" required>
+                 <input type="text" id="jobCompany" placeholder="Company Name *" required>
+                 <textarea id="jobDescription" placeholder="Job Description *" required></textarea>
+                 <input type="email" id="jobContactEmail" placeholder="Contact Email *" required>
+                 <p class="requirement-note">Note: Job posting requires a minimum follower count (simulated).</p>
+                 <button type="button" id="publishJobButton" class="button primary-button">Publish Job</button>
+             </form>
+        </div>
     </div>
-    
-    <div id="jobPostings" class="glass-effect">
-      <h2><i class="fas fa-briefcase"></i> Free Job Postings</h2>
-      <form id="jobForm">
-        <input type="text" id="jobTitle" placeholder="Job Title" required />
-        <textarea id="jobDescription" placeholder="Job Description" required></textarea>
-        <input type="text" id="companyName" placeholder="Company Name" required />
-        <input type="email" id="contactEmail" placeholder="Contact Email" required />
-        <button type="submit" aria-label="Post job"><i class="fas fa-briefcase"></i> Post Job</button>
-        <p id="followerNotice" style="display: none; color: red;">
-          <i class="fas fa-exclamation-triangle"></i> You need at least 1,000 followers to post a job.
-        </p>
-        <p id="jobError" style="color: red; display: none;"></p>
-      </form>
-      <div id="jobList">
-        <div id="jobListLoading" style="display: none;">Loading...</div>
-      </div>
+
+    <!-- Add Video Modal -->
+    <div id="addVideoModal" class="modal-overlay">
+        <div class="modal-content glass-effect">
+             <button class="close-btn" onclick="closeModal('addVideoModal')">&times;</button>
+             <h2>Upload Short Video</h2>
+             <form id="addVideoForm">
+                 <input type="text" id="videoTitle" placeholder="Video Title *" required>
+                 <textarea id="videoDescription" placeholder="Description (Optional)"></textarea>
+                 <label for="videoFile">Select Video File *:</label>
+                 <input type="file" id="videoFile" accept="video/*" required>
+                 <div id="videoPreview" class="media-preview-area"></div>
+                 <button type="button" id="publishVideoButton" class="button primary-button">Upload Video</button>
+             </form>
+        </div>
     </div>
-    
-    <div id="shortVideos" class="glass-effect">
-      <h2><i class="fas fa-video"></i> Short Videos</h2>
-      <div id="videoFeed">
-        <div id="videoFeedLoading" style="display: none;">Loading...</div>
-      </div>
+
+    <!-- Live Studio Modal (Placeholder) -->
+     <div id="liveStudioModal" class="modal-overlay">
+        <div class="modal-content glass-effect">
+             <button class="close-btn" onclick="closeModal('liveStudioModal')">&times;</button>
+             <h2>Live Studio</h2>
+             <div style="text-align: center; padding: 40px;">
+                 <i class="fas fa-broadcast-tower fa-3x" style="color: var(--primary-color); margin-bottom: 20px;"></i>
+                 <p>Live streaming controls and preview would appear here.</p>
+                 <button class="button danger-button" style="margin-top: 20px;">Go Live (Simulated)</button>
+             </div>
+        </div>
     </div>
-    
-    <div id="liveStudio" class="glass-effect">
-      <h2><i class="fas fa-broadcast-tower"></i> Live Studio</h2>
-      <p>Your followers will be notified when you go live!</p>
-      <button id="startLiveButton" aria-label="Go live"><i class="fas fa-play-circle"></i> Go Live</button>
-      <div id="livePreview" style="display: none;">
-        <p>Live streaming...</p>
-      </div>
-      <p id="liveError" style="color: red; display: none;"></p>
+
+    <!-- ======================= -->
+    <!--        NAVBAR           -->
+    <!-- ======================= -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="#">The Gruvist</a>
+        </div>
+        <div class="navbar-actions">
+            <!-- Buttons will be shown/hidden by JS based on login state -->
+            <button id="navLoginRegisterBtn" class="button" onclick="openModal('loginModal')">Login/Register</button>
+            <button id="navAddEventBtn" class="button" onclick="openModal('addEventModal')"><i class="fas fa-plus"></i> Add Event</button>
+            <button id="navAddJobBtn" class="button" onclick="openModal('addJobModal')"><i class="fas fa-briefcase"></i> Post Job</button>
+            <button id="navAddVideoBtn" class="button" onclick="openModal('addVideoModal')"><i class="fas fa-video"></i> Add Video</button>
+            <button id="navGoLiveBtn" class="button" onclick="openModal('liveStudioModal')"><i class="fas fa-broadcast-tower"></i> Go Live</button>
+            <button id="navProfileBtn" class="button" onclick="showProfile()"><i class="fas fa-user"></i> Profile</button>
+            <button id="navLogoutBtn" class="button danger-button" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <!-- ======================= -->
+    <!--     MAIN CONTENT AREA   -->
+    <!-- ======================= -->
+    <main class="creative-layout">
+
+        <!-- Happenings Panel (Left) -->
+        <aside class="panel happenings-panel">
+            <h2><i class="fas fa-calendar-alt"></i> Happenings</h2>
+            <div class="happenings-controls">
+                <input type="search" id="happeningsSearch" placeholder="Search events...">
+                <select id="happeningsFilterCategory">
+                    <option value="all">All Categories</option>
+                     <option value="concert">Concert</option>
+                     <option value="workshop">Workshop</option>
+                     <option value="meetup">Meetup</option>
+                     <option value="livestream">Livestream</option>
+                     <option value="art">Art & Culture</option>
+                     <option value="food">Food & Drink</option>
+                     <option value="comedy">Comedy</option>
+                     <option value="other">Other</option>
+                </select>
+                <select id="happeningsSortBy">
+                    <option value="recommended">Sort by Recommended</option>
+                    <option value="date">Sort by Date</option>
+                    <option value="popularity">Sort by Popularity</option>
+                </select>
+            </div>
+
+            <!-- Refined Sections -->
+            <section class="happenings-section recommended-section">
+                <h3><i class="fas fa-star" style="color: var(--secondary-color);"></i> Recommended This Week</h3>
+                <ul id="eventsThisWeekList" class="event-list"><li class="loading-indicator">Loading...</li></ul>
+                <p id="eventsThisWeekEmpty" class="empty-state" style="display: none;">No events recommended this week.</p>
+            </section>
+
+            <section class="happenings-section recommended-section">
+                <h3><i class="fas fa-star" style="color: var(--secondary-color);"></i> Recommended This Month</h3>
+                <ul id="eventsThisMonthList" class="event-list"><li class="loading-indicator">Loading...</li></ul>
+                 <p id="eventsThisMonthEmpty" class="empty-state" style="display: none;">No events recommended this month.</p>
+            </section>
+
+            <section class="happenings-section recommended-section">
+                <h3><i class="fas fa-star" style="color: var(--secondary-color);"></i> Recommended This Year</h3>
+                <ul id="eventsThisYearList" class="event-list"><li class="loading-indicator">Loading...</li></ul>
+                 <p id="eventsThisYearEmpty" class="empty-state" style="display: none;">No events recommended this year.</p>
+            </section>
+
+            <section class="happenings-section">
+                <h3><i class="fas fa-broadcast-tower live-indicator"></i> Live Now</h3>
+                <div id="liveNowList" class="live-list"><div class="loading-indicator">Loading...</div></div>
+                <p id="liveNowEmpty" class="empty-state" style="display: none;">Nothing is live right now.</p>
+            </section>
+
+            <section class="happenings-section">
+                <h3><i class="fas fa-video"></i> Featured Videos</h3>
+                <div id="featuredVideosList" class="video-list"><div class="loading-indicator">Loading...</div></div>
+                 <p id="featuredVideosEmpty" class="empty-state" style="display: none;">No featured videos available.</p>
+            </section>
+        </aside>
+
+        <!-- Feed Area (Center) -->
+        <section class="panel feed-area" id="feedArea">
+            <!-- Feed content (Events, Jobs, Videos, Posts) will be loaded here by JS -->
+            <div class="loading-indicator" id="feedLoadingIndicator">Loading Feed...</div>
+            <div class="empty-state" id="feedEmptyState" style="display: none;">Feed is currently empty. Check back later!</div>
+
+            <!--
+                NOTE: The actual cards (event-card, job-card, video-card)
+                are generated by the renderEventCard, renderJobCard, etc., functions
+                in app.js and dynamically inserted into this feedArea.
+                There is NO static "Add Event" card here.
+            -->
+
+        </section>
+
+        <!-- Profile Panel (Right) -->
+        <aside class="panel profile-panel">
+            <div class="profile-header">
+                <div class="profile-image-container">
+                    <!-- Added loading="lazy" for performance -->
+                    <img src="default-profile.png" alt="User Profile Picture" id="profilePicture" class="profile-image" loading="lazy">
+                    <button id="editProfilePictureBtn" class="edit-profile-pic-btn"><i class="fas fa-camera"></i></button>
+                    <input type="file" id="profileImageUpload" accept="image/*" style="display: none;">
+                </div>
+                <div class="profile-info">
+                    <h2 id="userName">Loading...</h2>
+                    <p id="userLocation"><i class="fas fa-map-marker-alt"></i> Loading...</p>
+                    <p id="contactInfo">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <section class="profile-section">
+                <h3>Interests <button id="editInterestsBtn" class="edit-button"><i class="fas fa-edit"></i></button></h3>
+                <ul id="interestsList"><li class="loading-indicator">Loading...</li></ul>
+                <div id="editInterestsArea" style="display: none;">
+                    <textarea id="interestsInput" placeholder="Enter interests, separated by commas"></textarea>
+                    <button id="saveInterestsBtn" class="button save-button">Save Interests</button>
+                </div>
+            </section>
+
+            <!-- Goals -->
+            <section class="profile-section">
+                <h3>Goals <button id="editGoalsBtn" class="edit-button"><i class="fas fa-edit"></i></button></h3>
+                <ul id="goalsList"><li class="loading-indicator">Loading...</li></ul>
+                <div id="editGoalsArea" style="display: none;">
+                    <textarea id="goalsInput" placeholder="Enter goals, one per line"></textarea>
+                    <button id="saveGoalsBtn" class="button save-button">Save Goals</button>
+                </div>
+            </section>
+
+            <!-- Favorite Artists -->
+             <section class="profile-section">
+                <h3>Favorite Artists <button id="editFavArtistsBtn" class="edit-button"><i class="fas fa-edit"></i></button></h3>
+                <ul id="favArtistsList"><li class="loading-indicator">Loading...</li></ul>
+                <div id="editFavArtistsArea" style="display: none;">
+                    <textarea id="favArtistsInput" placeholder="Enter favorite artists, separated by commas"></textarea>
+                    <button id="saveFavArtistsBtn" class="button save-button">Save Artists</button>
+                </div>
+            </section>
+
+            <!-- Favorite Genres -->
+             <section class="profile-section">
+                <h3>Favorite Genres <button id="editFavGenresBtn" class="edit-button"><i class="fas fa-edit"></i></button></h3>
+                <ul id="favGenresList"><li class="loading-indicator">Loading...</li></ul>
+                <div id="editFavGenresArea" style="display: none;">
+                    <textarea id="favGenresInput" placeholder="Enter favorite genres, separated by commas"></textarea>
+                    <button id="saveFavGenresBtn" class="button save-button">Save Genres</button>
+                </div>
+            </section>
+
+            <!-- Favorite Venues -->
+             <section class="profile-section">
+                <h3>Favorite Venues <button id="editFavVenuesBtn" class="edit-button"><i class="fas fa-edit"></i></button></h3>
+                <ul id="favVenuesList"><li class="loading-indicator">Loading...</li></ul>
+                <div id="editFavVenuesArea" style="display: none;">
+                    <textarea id="favVenuesInput" placeholder="Enter favorite venues, separated by commas"></textarea>
+                    <button id="saveFavVenuesBtn" class="button save-button">Save Venues</button>
+                </div>
+            </section>
+
+            <!-- Hosted Events -->
+            <section class="profile-section">
+                <h3>Hosted Events</h3>
+                <ul id="hostedEventsList"><li class="loading-indicator">Loading...</li></ul>
+                <!-- Button to open the Add Event Modal -->
+                <button id="hostNewEventBtn" class="button secondary-button full-width" onclick="openModal('addEventModal')"><i class="fas fa-plus-circle"></i> Host New Event</button>
+            </section>
+
+            <!-- Recommendations -->
+            <section class="profile-section">
+                <h3>Recommendations</h3>
+                <div id="recommendedItemsList"><div class="loading-indicator">Loading...</div></div>
+                 <p id="recommendedItemsEmpty" class="empty-state" style="display: none;">No recommendations right now.</p>
+            </section>
+
+            <!-- Notifications -->
+            <section class="profile-section">
+                <h3>Notifications</h3>
+                <ul id="notificationsList"><li class="loading-indicator">Loading...</li></ul>
+                 <p id="notificationsEmpty" class="empty-state" style="display: none;">No new notifications.</p>
+            </section>
+
+            <!-- Community -->
+            <section class="profile-section">
+                <h3>Community</h3>
+                 <button id="viewForumsBtn" class="button secondary-button full-width" onclick="alert('Forum view not implemented.')"><i class="fas fa-comments"></i> View Forums</button>
+                 <button id="viewGroupsBtn" class="button secondary-button full-width" onclick="alert('Group view not implemented.')"><i class="fas fa-users"></i> View Groups</button>
+            </section>
+
+            <!-- Resources -->
+             <section class="profile-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Artist Resources</a></li>
+                    <li><a href="#">Venue Finder</a></li>
+                </ul>
+            </section>
+        </aside>
+
+    </main>
+
+    <!-- ======================= -->
+    <!--   CHAT UI PLACEHOLDER   -->
+    <!-- ======================= -->
+    <button id="chat-toggle-button" class="chat-toggle-button"><i class="fas fa-comments"></i> Chat</button>
+    <div id="chat-container" class="chat-container glass-effect">
+        <div class="chat-header">
+            <h3>Chat</h3>
+            <button class="close-btn" onclick="toggleChat(false)">&times;</button>
+        </div>
+        <div class="chat-body">
+            <div class="chat-sidebar">
+                <h4>Contacts / Groups</h4>
+                <ul id="chatContactList">
+                    <!-- Chat contacts loaded here by JS -->
+                    <li class="loading-indicator">Loading...</li>
+                </ul>
+            </div>
+            <div class="chat-main">
+                <div class="chat-messages" id="chatMessagesArea">
+                    <!-- Messages loaded here by JS -->
+                    <div class="empty-state">Select a chat to start messaging.</div>
+                </div>
+                <form class="chat-input-form" id="chatInputForm">
+                    <input type="text" id="chatMessageInput" placeholder="Type a message..." required>
+                    <button type="submit" title="Send"><i class="fas fa-paper-plane"></i></button>
+                    <button type="button" class="chat-media-btn" title="Attach Media" onclick="alert('Media attachment not implemented.')"><i class="fas fa-paperclip"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="chat-reminder" id="chatReminder">You have unread messages!</div>
     </div>
-    
-    <div id="commentsSection" class="glass-effect">
-      <h2><i class="fas fa-comments"></i> Comments</h2>
-      <div id="commentsList">
-        <div id="commentsListLoading" style="display: none;">Loading...</div>
-      </div>
-      <div id="newCommentSection">
-        <textarea id="commentText" placeholder="Share your thoughts..."></textarea>
-        <button id="addVoiceComment" aria-label="Add voice comment"><i class="fas fa-microphone"></i></button>
-        <button id="addImageComment" aria-label="Add image comment"><i class="fas fa-image"></i></button>
-        <button id="addVideoComment" aria-label="Add video comment"><i class="fas fa-video"></i></button>
-        <button id="postComment" aria-label="Post comment"><i class="fas fa-paper-plane"></i> Post Comment</button>
-        <p id="commentError" style="color: red; display: none;"></p>
-      </div>
-    </div>
-  </div>
-  
-  <nav class="bottom-nav">
-    <a href="#home" aria-label="Home"><i class="fas fa-home"></i></a>
-    <a href="#events" aria-label="Events"><i class="fas fa-calendar-alt"></i></a>
-    <a href="#shortVideos" aria-label="Videos"><i class="fas fa-video"></i></a>
-    <a href="#liveStudio" aria-label="Live studio"><i class="fas fa-broadcast-tower"></i></a>
-    <a href="#profile" aria-label="Profile"><i class="fas fa-user"></i></a>
-  </nav>
-  
-  <script src="script.js"></script>
+
+
+    <!-- Placeholder for Map Library JS if needed -->
+    <!-- <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> -->
+    <!-- Link to your final JS file -->
+    <script src="app.js"></script>
 </body>
 </html>
